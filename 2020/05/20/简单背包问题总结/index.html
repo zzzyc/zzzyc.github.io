@@ -87,7 +87,7 @@
 <meta property="og:description" content="$1. \ 01$背包：$n$种物品每种一件，求体积为$V$的背包可获得的最大价值$f[i][j]$表示考虑前$i$种物品，体积为$j$的状态状态转移：要么选第$i$种物品，要么不选第$i$种物品$f[i][j] &#x3D; max(f[i-1][j],f[i-1][j-v_i]+w_i)$滚动数组优化，为了保证状态由前$i-1$个物品转移而来，故逆序枚举体积时间复杂度：$O(nV)$  $2.$ 完全背">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200513153456863.png">
 <meta property="article:published_time" content="2020-05-20T03:06:41.388Z">
-<meta property="article:modified_time" content="2020-05-20T03:45:31.659Z">
+<meta property="article:modified_time" content="2020-05-20T03:48:27.754Z">
 <meta property="article:author" content="solego">
 <meta property="article:tag" content="背包问题">
 <meta name="twitter:card" content="summary">
@@ -399,7 +399,7 @@
   <p><span>本文标题:</span>简单背包问题总结</a></p>
   <p><span>文章作者:</span>solego</a></p>
   <p><span>发布时间:</span>2020年05月20日 - 11:06:41</p>
-  <p><span>最后更新:</span>2020年05月20日 - 11:45:31</p>
+  <p><span>最后更新:</span>2020年05月20日 - 11:48:27</p>
   <p><span>原始链接:</span><a href="/2020/05/20/%E7%AE%80%E5%8D%95%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" title="简单背包问题总结">http://yoursite.com/2020/05/20/%E7%AE%80%E5%8D%95%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/05/20/%E7%AE%80%E5%8D%95%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"  aria-label="复制成功！"></i></span>
   </p>
@@ -1110,6 +1110,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
