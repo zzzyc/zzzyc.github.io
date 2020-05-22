@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/%E5%9F%BA%E7%A1%80DQL/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/22/%E5%85%B3%E7%B3%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="solego">
@@ -293,7 +293,157 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/05/21/%E5%9F%BA%E7%A1%80DQL/" itemprop="url">基础DQL</a></h1>
+                <a class="post-title-link" href="/2020/05/22/%E5%85%B3%E7%B3%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" itemprop="url">关系的基本概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-22T16:46:07+08:00">
+                2020-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          关于数据库的基本概念
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/05/22/%E5%85%B3%E7%B3%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+	
+	<div>
+    
+	</div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/%E5%9F%BA%E7%A1%80DML/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="solego">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="solego's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/21/%E5%9F%BA%E7%A1%80DML/" itemprop="url">基础数据操纵</a></h1>
         
 
         <div class="post-meta">
@@ -366,10 +516,10 @@
 
       
         
-          基础DQL
+          关于数据库操纵的基本语法
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2020/05/21/%E5%9F%BA%E7%A1%80DQL/#more" rel="contents">
+            <a class="btn" href="/2020/05/21/%E5%9F%BA%E7%A1%80DML/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -519,6 +669,7 @@
           
             <a id="more"></a>
 
+<hr>
 <p>$1. \ 01$背包：$n$种物品每种一件，求体积为$V$的背包可获得的最大价值<br>$f[i][j]$表示考虑前$i$种物品，体积为$j$的状态<br>状态转移：要么选第$i$种物品，要么不选第$i$种物品<br>$f[i][j] = max(f[i-1][j],f[i-1][j-v_i]+w_i)$<br>滚动数组优化，为了保证状态由前$i-1$个物品转移而来，故逆序枚举体积<br>时间复杂度：$O(nV)$</p>
 <hr>
 <p>$2.$ 完全背包：$n$种物品每种无限，求体积为$V$的背包可获得的最大价值<br>$f[i][j]$表示考虑前$i$种物品，体积为$j$的状态<br>状态转移：考虑到当前第$i$种物品，这次可以继续选，或者不选<br>$f[i][j]=max(f[i-1][j-k\times v_i]+k\times w_i)(k\geq0)$<br>当$k=0$时自然是$f[i-1][j]$<br>当$k&gt;0$时，为$f[i-1][j-k\times v_i]+k \times w_i$<br>换种思路，考虑$f[i][j]=max(f[i][j],f[i][j-v_i]+w_i)$。即考虑前$i$个物品，体积为$j$，<br>可以在本次选择中不选第$i$种物品$(f[i][j])$，也可选择第$i$种物品$f[i][j-v_i]+w_i$。<br>这是因为每种物品都是无限的。<br>滚动数组优化，因为状态可由$i$转移而来，故正序枚举体积<br>时间复杂度：$O(nV)$</p>
@@ -621,7 +772,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -643,7 +794,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
