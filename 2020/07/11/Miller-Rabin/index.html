@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="素数判定," />
 
 
 
@@ -79,15 +79,16 @@
 
 
 
-<meta name="description" content="$Miller-Rabin$大素数判定用途：针对$10^{18}$级别，这种$O(\sqrt{n})$无法通过的问题，采用该方法进行大素数判定，则一个数不是素数的概率为${\frac{1}{2}}^{5100}$，出差概率极其小，故可以认为通过该方法的数一定是素数。 前置知识： 费马小定理：$a^p\equiv a\pmod{p}$，其中$p$是素数。 二测探测定理：若$x^2\equiv1\pm">
+<meta name="description" content="Miller-Rabin大素数判定 前置：费马小定理和二次探测定理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Miller-Rabin">
 <meta property="og:url" content="http://yoursite.com/2020/07/11/Miller-Rabin/index.html">
 <meta property="og:site_name" content="solego&#39;s blog">
-<meta property="og:description" content="$Miller-Rabin$大素数判定用途：针对$10^{18}$级别，这种$O(\sqrt{n})$无法通过的问题，采用该方法进行大素数判定，则一个数不是素数的概率为${\frac{1}{2}}^{5100}$，出差概率极其小，故可以认为通过该方法的数一定是素数。 前置知识： 费马小定理：$a^p\equiv a\pmod{p}$，其中$p$是素数。 二测探测定理：若$x^2\equiv1\pm">
+<meta property="og:description" content="Miller-Rabin大素数判定 前置：费马小定理和二次探测定理">
 <meta property="article:published_time" content="2020-07-10T16:50:46.847Z">
-<meta property="article:modified_time" content="2020-07-10T18:19:29.992Z">
+<meta property="article:modified_time" content="2020-09-25T16:45:35.096Z">
 <meta property="article:author" content="solego">
+<meta property="article:tag" content="素数判定">
 <meta name="twitter:card" content="summary">
 
 
@@ -182,17 +183,27 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
           </a>
@@ -200,9 +211,9 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
+          <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
           </a>
@@ -302,7 +313,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text"> </span>
               
               <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-11T00:50:46+08:00">
                 2020-07-11
@@ -310,10 +321,44 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text"> &#58;</span>
+              
+              <time title=" " itemprop="dateModified" datetime="2020-09-26T00:45:35+08:00">
+                2020-09-26
+              </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text"> </span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E8%AE%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">数论</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -347,7 +392,11 @@
       
 
       
-        <h1 id="Miller-Rabin-大素数判定"><a href="#Miller-Rabin-大素数判定" class="headerlink" title="$Miller-Rabin$大素数判定"></a>$Miller-Rabin$大素数判定</h1><h3 id="用途："><a href="#用途：" class="headerlink" title="用途："></a><strong>用途：</strong></h3><p>针对$10^{18}$级别，这种$O(\sqrt{n})$无法通过的问题，采用该方法进行大素数判定，则一个数不是素数的概率为${\frac{1}{2}}^{5100}$，出差概率极其小，故可以认为通过该方法的数一定是素数。</p>
+        <p>Miller-Rabin大素数判定</p>
+<p>前置：费马小定理和二次探测定理</p>
+<a id="more"></a>
+
+<h1 id="Miller-Rabin-大素数判定"><a href="#Miller-Rabin-大素数判定" class="headerlink" title="$Miller-Rabin$大素数判定"></a>$Miller-Rabin$大素数判定</h1><h3 id="用途："><a href="#用途：" class="headerlink" title="用途："></a><strong>用途：</strong></h3><p>针对$10^{18}$级别，这种$O(\sqrt{n})$无法通过的问题，采用该方法进行大素数判定，则一个数不是素数的概率为${\frac{1}{2}}^{5100}$，出差概率极其小，故可以认为通过该方法的数一定是素数。</p>
 <h3 id="前置知识："><a href="#前置知识：" class="headerlink" title="前置知识："></a><strong>前置知识：</strong></h3><ul>
 <li>费马小定理：$a^p\equiv a\pmod{p}$，其中$p$是素数。</li>
 <li>二测探测定理：若$x^2\equiv1\pmod{p}$，其中$p$是素数且$0&lt;x&lt;p$，则有$(x+1)(x-1)\equiv0\pmod{p}$，即$x=1$或$x=p-1$。</li>
@@ -378,6 +427,38 @@
 	<div>
     
         
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+
+  <p><span>本文标题:</span>Miller-Rabin</a></p>
+  <p><span>文章作者:</span>solego</a></p>
+  <p><span>发布时间:</span>2020年07月11日 - 00:50:46</p>
+  <p><span>最后更新:</span>2020年09月26日 - 00:45:35</p>
+  <p><span>原始链接:</span><a href="/2020/07/11/Miller-Rabin/" title="Miller-Rabin">http://yoursite.com/2020/07/11/Miller-Rabin/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/07/11/Miller-Rabin/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
     
 	</div>
 
@@ -407,6 +488,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%B4%A0%E6%95%B0%E5%88%A4%E5%AE%9A/" rel="tag"># 素数判定</a>
+          
+        </div>
+      
 
       
       
@@ -425,6 +512,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/14/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AD%A6%E4%B9%A0/" rel="prev" title="微信小程序代码管理">
+                微信小程序代码管理 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -503,9 +594,9 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives">
+                <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -516,7 +607,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -527,7 +618,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -625,7 +716,6 @@
 
 
 -->
-
 
         
 <div class="busuanzi-count">
@@ -1138,6 +1228,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
