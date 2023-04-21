@@ -6,13 +6,23 @@
     <description>Recent content in Posts on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Fri, 21 Apr 2023 16:09:20 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 22 Apr 2023 01:31:37 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>谈谈最近</title>
+      <link>https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/</link>
+      <pubDate>Sat, 22 Apr 2023 01:31:37 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/</guid>
+      <description>&lt;p&gt;那就从今天开始吧，哦对了，我习惯把睡觉前后作为一天的分界线。&lt;/p&gt;
+&lt;p&gt;我一直对生活没有很大的热情，但却有一定的执念。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>新的博客，新的生活</title>
-      <link>https://zzzyc.github.io/post/first/</link>
+      <link>https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/</link>
       <pubDate>Fri, 21 Apr 2023 16:09:20 +0800</pubDate>
       
-      <guid>https://zzzyc.github.io/post/first/</guid>
+      <guid>https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/</guid>
       <description>起因在于之前搭的 hexo 虽然简洁，但是太久没维护了。 在朋友的推荐下尝试了 hugo ，简单易上手，Maupassant 主题简洁优雅。 那就从这重新起航吧。</description>
     </item>
     
