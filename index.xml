@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/</link>
+    <description>Recent content on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Fri, 21 Apr 2023 21:08:41 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello</title>
+      <link>https://zzzyc.github.io/post/hello/</link>
+      <pubDate>Fri, 21 Apr 2023 21:08:41 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/post/hello/</guid>
+      <description>hello</description>
+    </item>
+    
+    <item>
+      <title>新的博客，新的生活</title>
+      <link>https://zzzyc.github.io/post/first/</link>
+      <pubDate>Fri, 21 Apr 2023 16:09:20 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/post/first/</guid>
+      <description>起因在于之前搭的 hexo 虽然简洁，但是太久没维护了。 在朋友的推荐下尝试了 hugo ，简单易上手，Maupassant 主题简洁优雅。 那就从这重新起航吧。</description>
+    </item>
+    
+    <item>
+      <title>关于我</title>
+      <link>https://zzzyc.github.io/about/</link>
+      <pubDate>Fri, 21 Apr 2023 16:00:45 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/about/</guid>
+      <description>这里是 solego&amp;rsquo;s blog 记录一些学习和生活日常</description>
+    </item>
+    
+    <item>
+      <title>归档</title>
+      <link>https://zzzyc.github.io/archives/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zzzyc.github.io/archives/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>搜索</title>
+      <link>https://zzzyc.github.io/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zzzyc.github.io/search/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
