@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Solutions on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/solution/</link>
+    <description>Recent content in Solutions on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Mon, 24 Apr 2023 20:32:42 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/solution/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>01_20230415_携程研发岗笔试</title>
+      <link>https://zzzyc.github.io/solution/01_20230415_%E6%90%BA%E7%A8%8B%E7%A0%94%E5%8F%91%E5%B2%97%E7%AC%94%E8%AF%95/</link>
+      <pubDate>Mon, 24 Apr 2023 20:32:42 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/solution/01_20230415_%E6%90%BA%E7%A8%8B%E7%A0%94%E5%8F%91%E5%B2%97%E7%AC%94%E8%AF%95/</guid>
+      <description>2023年04月15日携程研发岗笔试</description>
+    </item>
+    
+  </channel>
+</rss>
