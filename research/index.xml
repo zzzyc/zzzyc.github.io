@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>科研 on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/research/</link>
+    <description>Recent content in 科研 on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Thu, 27 Apr 2023 11:06:29 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/research/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Conclusion</title>
+      <link>https://zzzyc.github.io/research/conclusion/</link>
+      <pubDate>Thu, 27 Apr 2023 11:06:29 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/research/conclusion/</guid>
+      <description>阅读论文总结</description>
+    </item>
+    
+  </channel>
+</rss>
