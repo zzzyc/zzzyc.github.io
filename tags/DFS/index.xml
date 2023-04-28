@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>欧拉路径 on solego&#39;s blog</title>
-    <link>https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/</link>
-    <description>Recent content in 欧拉路径 on solego&#39;s blog</description>
+    <title>DFS on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/tags/DFS/</link>
+    <description>Recent content in DFS on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Thu, 27 Apr 2023 14:13:16 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 27 Apr 2023 14:13:16 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/tags/DFS/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>欧拉路径的DFS存储顺序</title>
       <link>https://zzzyc.github.io/algorithm/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84%E7%9A%84DFS%E5%AD%98%E5%82%A8%E9%A1%BA%E5%BA%8F/</link>
