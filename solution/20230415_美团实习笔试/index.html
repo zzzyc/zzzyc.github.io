@@ -9,20 +9,20 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>20230415_携程研发岗笔试 | solego&#39;s blog</title>
-    <meta property="og:title" content="20230415_携程研发岗笔试 - solego&#39;s blog">
+    <title>20230415_美团实习笔试 | solego&#39;s blog</title>
+    <meta property="og:title" content="20230415_美团实习笔试 - solego&#39;s blog">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2023-04-24T20:32:42&#43;08:00'>
+    <meta property="article:published_time" content='2023-04-29T13:39:28&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2023-04-24T20:32:42&#43;08:00'>
+    <meta property="article:modified_time" content='2023-04-29T13:39:28&#43;08:00'>
         
     <meta name="Keywords" content="">
-    <meta name="description" content="20230415_携程研发岗笔试">
+    <meta name="description" content="20230415_美团实习笔试">
         
     <meta name="author" content="solego">
-    <meta property="og:url" content="https://zzzyc.github.io/solution/20230415_%E6%90%BA%E7%A8%8B%E7%A0%94%E5%8F%91%E5%B2%97%E7%AC%94%E8%AF%95/">
+    <meta property="og:url" content="https://zzzyc.github.io/solution/20230415_%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AF%95/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -142,10 +142,10 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#a-找到you">A. 找到you</a></li>
-    <li><a href="#b-最小公倍数">B. 最小公倍数</a></li>
-    <li><a href="#c魔法之树">C.魔法之树</a></li>
-    <li><a href="#d01串的回文子串">D.01串的回文子串</a></li>
+    <li><a href="#a-字符串前缀">A. 字符串前缀</a></li>
+    <li><a href="#b-分糖果">B. 分糖果</a></li>
+    <li><a href="#c-交通规划">C. 交通规划</a></li>
+    <li><a href="#d-俄罗斯套娃">D. 俄罗斯套娃</a></li>
   </ul>
 </nav>
     </div>
@@ -183,11 +183,11 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">20230415_携程研发岗笔试</h1>
+            <h1 class="post-title">20230415_美团实习笔试</h1>
         </header>
         
-  <time datetime="2023-04-24T12:32:42Z" class="post-meta meta-date dt-published">
-    2023年4月24日
+  <time datetime="2023-04-29T05:39:28Z" class="post-meta meta-date dt-published">
+    2023年4月29日
   </time>
 
 
@@ -214,13 +214,149 @@
         </div>
         
         <div class="post-content">
-            <h2 id="a-找到you">A. 找到you</h2>
+            <h2 id="a-字符串前缀">A. 字符串前缀</h2>
 <p><strong>题意：</strong></p>
-<p>给定一个仅包含小写字母的 $n\times n$ 的矩阵，问这个矩阵中所有 $2\times 2$ 的矩阵中同时包含 <code>y</code>、<code>o</code> 和 <code>u</code> 三个字符的子矩阵数量。</p>
-<p>数据范围：$1\leq n, m\leq 1000$</p>
+<p>$T$ 组数据，每组数据给定两个串 $s$ 和 $t$。</p>
+<p>有两种形式的操作：</p>
+<ul>
+<li>将 $s$ 串的末尾删除</li>
+<li>将 $s$ 串中任意一个字符修改为其他字符</li>
+</ul>
+<p>问至少执行多少次操作，才能使得 $s$ 串是 $t$ 串的前缀。</p>
+<p>数据范围：$1\leq T\leq 10, 1\leq |s|, |t|\leq 5\times 10^4$</p>
 <p><strong>题解：</strong></p>
-<p>暴力枚举每个 $2\times 2$ 子矩阵，对于每个子矩阵，判断其之中是否同时存在 <code>y</code>、<code>o</code> 和 <code>u</code> 三个字符即可，共需要枚举 $(n - 1) \times (m - 1)$ 个子矩阵。</p>
-<p>时间复杂度分析：$O(nm)$</p>
+<p>本质上好像选择很多，其实没有多少选择。</p>
+<ul>
+<li>要么就将 $s[i]$ 修改成 $t[i]$ 。</li>
+<li>要么就将 s[|s|] 删除。</li>
+</ul>
+<p>但是删除和修改的都是一次操作，不如将全部操作都设置为修改。</p>
+<p>什么时候会有删除操作呢，当 $|s| &gt; |t|$ 时，必须要删除 s 的末尾才能使得 s 的长度不大于 t ，从而 s 为 t 的前缀。</p>
+<p><strong>代码：</strong></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">50010</span>;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">char</span> s[N], t[N];
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> ns, nt;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">solve</span>() {
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%s%s&#34;</span>, s <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>, t <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>    ns <span style="color:#000;font-weight:bold">=</span> strlen(s <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>), nt <span style="color:#000;font-weight:bold">=</span> strlen(t <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (ns <span style="color:#000;font-weight:bold">&gt;</span> nt) ans <span style="color:#000;font-weight:bold">+=</span> ns <span style="color:#000;font-weight:bold">-</span> nt, ns <span style="color:#000;font-weight:bold">=</span> nt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> ns; <span style="color:#000;font-weight:bold">++</span>i)
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (s[i] <span style="color:#000;font-weight:bold">!=</span> t[i]) ans <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, ans);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> T;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>T);
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> T; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>        solve();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="b-分糖果">B. 分糖果</h2>
+<p><strong>题意：</strong></p>
+<p>$T$ 组数据，每组数据有 $a$ 个口味 $A$ 的糖果和 $b$ 个口味 $B$ 的糖果，要分给 $n$ 个小朋友。</p>
+<p>每个小朋友只能分到一种口味的糖果，为了公平，要尽可能使得每个小朋友获得的糖果都差不多，即希望获得最少糖果的小朋友获得的糖果尽可能多。</p>
+<p>问获得最少糖果的小朋友获得的糖果数，最多是多少？</p>
+<p>数据范围：$1\leq a, b\leq 10000, 2\leq n\leq a+b, 1\leq T\leq 100$</p>
+<p><strong>题解：</strong></p>
+<p>二分答案，O(1) check。</p>
+<p><strong>代码：</strong></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>T <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>(<span style="color:#0086b3">input</span>())
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">while</span> T <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>:
+</span></span><span style="display:flex;"><span>    n, a, b <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">list</span>(<span style="color:#0086b3">map</span>(<span style="color:#0086b3">int</span>, <span style="color:#0086b3">input</span>()<span style="color:#000;font-weight:bold">.</span>split()))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">check</span>(cnt):
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> a <span style="color:#000;font-weight:bold">//</span> cnt <span style="color:#000;font-weight:bold">+</span> b <span style="color:#000;font-weight:bold">//</span> cnt <span style="color:#000;font-weight:bold">&gt;=</span> n
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    l, r <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>, <span style="color:#0086b3">max</span>(a, b)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> l <span style="color:#000;font-weight:bold">&lt;</span> r:
+</span></span><span style="display:flex;"><span>        mid <span style="color:#000;font-weight:bold">=</span> (l <span style="color:#000;font-weight:bold">+</span> r <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&gt;&gt;</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> check(mid):
+</span></span><span style="display:flex;"><span>            l <span style="color:#000;font-weight:bold">=</span> mid
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">else</span>:
+</span></span><span style="display:flex;"><span>            r <span style="color:#000;font-weight:bold">=</span> mid <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(l)
+</span></span><span style="display:flex;"><span>    T <span style="color:#000;font-weight:bold">-=</span> <span style="color:#099">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="c-交通规划">C. 交通规划</h2>
+<p><strong>题意：</strong></p>
+<p>$m$ 次操作，$n$ 个城市。$n$ 个城市按照序号从左往右，即 $1$ 号城市是最左边，$n$ 号城市是最右边。</p>
+<p>有如下三种操作：</p>
+<ul>
+<li><code>L x</code> 表示在编号为 <code>x-1</code> 和编号为 <code>x</code> 的城市之间建一条铁路。如果两者之间已经存在铁路，或者 <code>x = 1</code> ，则此操作忽略。</li>
+<li><code>R x</code> 表示在编号为 <code>x</code> 和编号为 <code>x + 1</code> 的城市之间建一条铁路。如果两者之间已经存在铁路，或者 <code>x = n</code> ，则此操作忽略。</li>
+<li><code>Q x</code> 表示查询从 <code>x</code> 出发，可以到达的最左边的城市和最右边的城市。</li>
+</ul>
+<p>数据范围：$1\leq n\leq 20000, 1\leq m\leq 200, 1\leq x\leq n$</p>
+<p><strong>题解：</strong>
+并查集，两个城市建一条铁路相当于这两个城市处于同一个集合。这里需要构建两个合并数组，一个在合并时父节点总是编号更小的，一个在合并时父节点总是编号更大的。</p>
+<p><strong>代码：</strong></p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -257,161 +393,85 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
 </span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1010</span>;
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">char</span> s[N][N];
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">10010</span>;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> pL[N], pR[N];
 </span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n, m;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">char</span> op[<span style="color:#099">2</span>];
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> num;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> <span style="color:#900;font-weight:bold">check</span>(<span style="color:#458;font-weight:bold">int</span> i, <span style="color:#458;font-weight:bold">int</span> j) {
-</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> val <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> x <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; x <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">2</span>; <span style="color:#000;font-weight:bold">++</span>x)
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> y <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; y <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">2</span>; <span style="color:#000;font-weight:bold">++</span>y) {
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (s[i <span style="color:#000;font-weight:bold">+</span> x][y <span style="color:#000;font-weight:bold">+</span> j] <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;y&#39;</span>) val <span style="color:#000;font-weight:bold">|=</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (s[i <span style="color:#000;font-weight:bold">+</span> x][y <span style="color:#000;font-weight:bold">+</span> j] <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;o&#39;</span>) val <span style="color:#000;font-weight:bold">|=</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (s[i <span style="color:#000;font-weight:bold">+</span> x][y <span style="color:#000;font-weight:bold">+</span> j] <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;u&#39;</span>) val <span style="color:#000;font-weight:bold">|=</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#099">2</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> val <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">7</span>;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">find</span>(<span style="color:#458;font-weight:bold">int</span> p[], <span style="color:#458;font-weight:bold">int</span> x) {
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> root <span style="color:#000;font-weight:bold">=</span> x;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> (root <span style="color:#000;font-weight:bold">!=</span> p[root]) root <span style="color:#000;font-weight:bold">=</span> p[root];
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> (x <span style="color:#000;font-weight:bold">!=</span> p[x]) {
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> nx <span style="color:#000;font-weight:bold">=</span> p[x];
+</span></span><span style="display:flex;"><span>        p[x] <span style="color:#000;font-weight:bold">=</span> root;
+</span></span><span style="display:flex;"><span>        x <span style="color:#000;font-weight:bold">=</span> nx;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> root;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n, <span style="color:#000;font-weight:bold">&amp;</span>m);;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) scanf(<span style="color:#d14">&#34;%s&#34;</span>, s[i] <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n, <span style="color:#000;font-weight:bold">&amp;</span>m);
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) pL[i] <span style="color:#000;font-weight:bold">=</span> pR[i] <span style="color:#000;font-weight:bold">=</span> i;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i)
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> j <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; j <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;=</span> m; <span style="color:#000;font-weight:bold">++</span>j) {
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (check(i, j)) ans <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> m; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#d14">&#34;%s%d&#34;</span>, op, <span style="color:#000;font-weight:bold">&amp;</span>num);
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">*</span>op <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;L&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (num <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#458;font-weight:bold">int</span> pa <span style="color:#000;font-weight:bold">=</span> find(pL, num <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>), pb <span style="color:#000;font-weight:bold">=</span> find(pL, num);
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (pa <span style="color:#000;font-weight:bold">==</span> pb) <span style="color:#000;font-weight:bold">continue</span> ;
+</span></span><span style="display:flex;"><span>            pL[pb] <span style="color:#000;font-weight:bold">=</span> pa;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, ans);
+</span></span><span style="display:flex;"><span>            pa <span style="color:#000;font-weight:bold">=</span> find(pR, num <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>), pb <span style="color:#000;font-weight:bold">=</span> find(pR, num);
+</span></span><span style="display:flex;"><span>            pR[pa] <span style="color:#000;font-weight:bold">=</span> pb;
+</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">*</span>op <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;R&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (num <span style="color:#000;font-weight:bold">==</span> n) <span style="color:#000;font-weight:bold">continue</span> ;
+</span></span><span style="display:flex;"><span>            <span style="color:#458;font-weight:bold">int</span> pa <span style="color:#000;font-weight:bold">=</span> find(pL, num), pb <span style="color:#000;font-weight:bold">=</span> find(pL, num <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (pa <span style="color:#000;font-weight:bold">==</span> pb) <span style="color:#000;font-weight:bold">continue</span> ;
+</span></span><span style="display:flex;"><span>            pL[pb] <span style="color:#000;font-weight:bold">=</span> pa;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="b-最小公倍数">B. 最小公倍数</h2>
-<p><strong>题意：</strong></p>
-<p>$T$ 组数据，每组数据给定一个 $n$，现在问在 $a + b = n$ 的情况下，使得 $lcm(a, b)$ 最大的 $a$ 和 $b$ 是多少？</p>
-<p>数据范围：$1\leq T\leq 10^5, 2\leq n\leq 10^{13}$</p>
-<p><strong>题解：</strong></p>
-<p>$T$ 组数据，而 $T$ 最大为 $10^5$ ，则每组数据至多要在 $O(\log n)$ 的时间解决，因为这个题需要求 $lcm$，这个求解的复杂度是 $O(\log n)$ 的，
-所以判断的操作得在 $O(1)$ 时间复杂度内。</p>
-<p>下面我们都认为 $a \leq b$
-当两个数 $a$ 和 $b$ ，满足 $a + 1 = b$ ，那么此时 $a$ 和 $b$ 互质，$lcm(a, b) = a \times b$。</p>
-<p>考虑奇数：将其拆分成 $a = \lfloor\frac{n}{2}\rfloor, b = \lceil\frac{n}{2}\rceil$，有 $a + 1 = b$，故此时最大的 $lcm(a, b)$ 就是 $a = \lfloor\frac{n}{2}\rfloor, b = \lceil\frac{n}{2}\rceil$。
-考虑偶数：将其拆分成 $a = \frac{n}{2}, b = \frac{n}{2}$ 的 $lcm(a, b) = \frac{n}{2}$。</p>
-<p>因为 $n$ 是偶数，所以拆分出必然是要么 $a$ 和 $b$ 均为偶数，要么 $a$ 和 $b$ 均为奇数。
-这里有一个结论，对于正数 $a,b,n$，如果有 $a + b = n$，且 $a$ 和 $b$ 均为奇数，则 $gcd(a,b)=1$ 。</p>
-<p>当 $n=2$，只有一种拆分法：$a=1,b=1$。</p>
-<p>当 $n&gt;2$，对于拆分 $a=1,b=n-1，lcm(1,n-1)&gt;lcm(\frac{n}{2},\frac{n}{2})$，所以$a=\frac{n}{2},b=\frac{n}{2}$这个拆分必然不如其他任意一个拆分。</p>
-<p>此外，下面的讨论都只针对大于 $2$ 的偶数。</p>
-<p>所以对于一个数 $n$，我们至多只需要考虑 $2$ 个位置，因为其他位置都不如这些位置中的任意一个：</p>
-<p>当 $\frac{n}{2}$ 为奇数，</p>
-<ul>
-<li>$a = \frac{n}{2} - 1, b = \frac{n}{2} + 1, lcm(a,b)=\frac{a \times b}{gcd(a,b)}=\frac{(\frac{n}{2} - 1)\times (\frac{n}{2} + 1)}{2}$，因为 $b-a=2$，且 $a$ 和 $b$ 都是偶数，故 $gcd(a,b)=2$</li>
-<li>$a = \frac{n}{2} - 2, b = \frac{n}{2} + 2,lcm(a,b)=\frac{a \times b}{gcd(a,b)}=\frac{(\frac{n}{2} - 2)\times (\frac{n}{2} + 2)}{1}$，因为 $b-a=4$，故公约数只能为$1,2,4$，且 $a$ 和 $b$ 都是奇数，故最大公约数只能为$1$。</li>
-</ul>
-<p>当 $\frac{n}{2}$ 为偶数，</p>
-<ul>
-<li>$a = \frac{n}{2} - 1, b = \frac{n}{2} + 1, lcm(a,b)=\frac{a \times b}{gcd(a,b)}=\frac{(\frac{n}{2} - 1)\times (\frac{n}{2} + 1)}{1}$，因为 $b-a=2$，故公约数只能为 $1, 2$，且 $a$ 和 $b$ 都是奇数，故 $gcd(a,b)=1$</li>
-<li>$a = \frac{n}{2} - 2, b = \frac{n}{2} + 2,lcm(a,b)=\frac{a \times b}{gcd(a,b)}=\frac{(\frac{n}{2} - 2)\times (\frac{n}{2} + 2)}{gcd(a,b)\geq2}$，因为 $b-a=4$，故公约数只能为$1,2,4$，且 $a$ 和 $b$ 都是偶数，故最大公约数至少为 $2$。</li>
-</ul>
-<p>上面已经说明了，对于本题中的 $a+b=n$，$a \times b &gt; (a - 1) \times (b + 1) = a \times b + a - b - 1$
-因为 $a - b - 1 &lt; 0$，故 $a \times b &gt; (a - 1) \times (b + 1)$。</p>
-<p>当 $\frac{n}{2}$ 为奇数，
-$lcm(\frac{n}{2}-1,\frac{n}{2}+1)-lcm(\frac{n}{2}-2,\frac{n}{2}+2)=(\frac{n^2}{8}-\frac{1}{2})-(\frac{n^2}{4}-4)=\frac{28-n^2}{8}$，因为 $\frac{n}{2}$ 为奇数且 $n&gt;2$，故 $n\geq6$，故 $\frac{28-n^2}{8}&lt;0$，故$lcm(\frac{n}{2}-2,\frac{n}{2}+2)&gt;lcm(\frac{n}{2}-1,\frac{n}{2}+1)$</p>
-<p>当 $\frac{n}{2}$ 为偶数，
-$lcm(\frac{n}{2}-1,\frac{n}{2}+1)&gt;lcm(\frac{n}{2}-2,\frac{n}{2}+2)$</p>
-<p>总结：</p>
-<p>当 $n$ 为奇数：$a = \lfloor\frac{n}{2}\rfloor, b = \lceil\frac{n}{2}\rceil$</p>
-<p>当 $n$ 为偶数：</p>
-<ul>
-<li>当 $n = 2$，$a=1,b=1$</li>
-<li>当 $\frac{n}{2}$ 为奇数，$a = \frac{n}{2} - 2, b = \frac{n}{2} + 2$</li>
-<li>当 $\frac{n}{2}$ 为偶数，$a = \frac{n}{2} - 1, b = \frac{n}{2} + 1$</li>
-</ul>
-<p><strong>代码：</strong></p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
-</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">typedef</span> <span style="color:#458;font-weight:bold">long</span> <span style="color:#458;font-weight:bold">long</span> ll;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">solve</span>() {
-</span></span><span style="display:flex;"><span>    ll n; scanf(<span style="color:#d14">&#34;%lld&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (n <span style="color:#000;font-weight:bold">&amp;</span> <span style="color:#099">1</span>) {
-</span></span><span style="display:flex;"><span>        printf(<span style="color:#d14">&#34;%lld %lld</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>, n <span style="color:#000;font-weight:bold">-</span> n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>);
-</span></span><span style="display:flex;"><span>    } <span style="color:#000;font-weight:bold">else</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (n <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">2</span>) puts(<span style="color:#d14">&#34;1 1</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> ((n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>) <span style="color:#000;font-weight:bold">&amp;</span> <span style="color:#099">1</span>) {
-</span></span><span style="display:flex;"><span>            printf(<span style="color:#d14">&#34;%lld %lld</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">2</span>, n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">2</span>);
+</span></span><span style="display:flex;"><span>            pa <span style="color:#000;font-weight:bold">=</span> find(pR, num), pb <span style="color:#000;font-weight:bold">=</span> find(pR, num <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>            pR[pa] <span style="color:#000;font-weight:bold">=</span> pb;
 </span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> {
-</span></span><span style="display:flex;"><span>            printf(<span style="color:#d14">&#34;%lld %lld</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>, n <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#d14">&#34;%d %d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, find(pL, num), find(pR, num));
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> T;
-</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>T);
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> (T<span style="color:#000;font-weight:bold">--</span>) {
-</span></span><span style="display:flex;"><span>        solve();
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="c魔法之树">C.魔法之树</h2>
-<p><strong>题意：</strong></p>
-<p>给定一个 $n$ 个点的树，问这棵树上任意一条简单路径，有起点和终点，这条路径上的点构成的二进制字符串对应的十进制数在 $[l, r]$ 范围内的简单路径数。这里的简单路径长度至少为 $1$ ，即自己到自己不算在内</p>
-<p>数据范围：$1\leq n\leq 1000, 1\leq l\leq r\leq {10^{14}}$</p>
+</div><h2 id="d-俄罗斯套娃">D. 俄罗斯套娃</h2>
+<p><strong>题意：</strong>
+有 $n$ 个俄罗斯套娃，第 $i$ 个俄罗斯套娃的大小为 $a_i$ ，内部空间为 $b_i$ ，有一个价值 $c_i$。
+每个俄罗斯套娃的花费是 $c_i \times k$ ，其中 $k$ 是其内部空间的剩余大小。如果第 $j$ 个套娃的大小 $a_j$ 可以放在第 $k$ 个套娃内部，要求是 $a_j\leq b_k$。每个俄罗斯套娃内只能有放一个其他的俄罗斯套娃。问将 $n$ 个俄罗斯套娃都套上的总花费多少。</p>
+<p>数据范围：$1\leq n, a_i, b_i, c_i\leq 100000, b_i\leq a_i$</p>
 <p><strong>题解：</strong>
-枚举以每个点作为起点，遍历完所有的其他 $n-1$ 个点为终点，当遇到值大于 $r$ ，则后面的点作为终点的简单路径构成的二进制字符串对应的十进制数都必然大于 $r$ 了，不会再可能成为答案了。这里必须要及时判断，一方面可以剪枝，另一方面是为了避免爆 <code>long long</code>。</p>
-<p>时间复杂度：$O(n^2)$</p>
+刚开始看错题，发现这笔试题怎么出个NPC的。后来发现每个俄罗斯套娃内部至多只能放一个其他的俄罗斯套娃。
+贪心考虑，因为剩余的俄罗斯套娃的价值 $c_i$ 越小，花费也就越少。因此按照 $c_i$ 对每个俄罗斯套娃从大到小排序，考虑排序后的俄罗斯套娃，第 $i$ 个俄罗斯套娃的内部空间为 $b_i$ ，故找到最大的，大小 $a_j$ 小于等于 $b_i$ 的俄罗斯套娃 $j$ 放到$i$ 的内部即可。</p>
+<p>这里需要注意到，自己不能套进自己。</p>
 <p><strong>代码：</strong></p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -466,153 +526,58 @@ $lcm(\frac{n}{2}-1,\frac{n}{2}+1)&gt;lcm(\frac{n}{2}-2,\frac{n}{2}+2)$</p>
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
 </span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">typedef</span> <span style="color:#458;font-weight:bold">long</span> <span style="color:#458;font-weight:bold">long</span> ll;
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">100010</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1010</span>;
-</span></span><span style="display:flex;"><span>vector<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">&gt;</span> g[N];
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">struct</span> <span style="color:#458;font-weight:bold">Node</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> a, b, c, id;
+</span></span><span style="display:flex;"><span>}q[N];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">struct</span> <span style="color:#458;font-weight:bold">Val</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> a, id;
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">bool</span> <span style="color:#000;font-weight:bold">operator</span><span style="color:#000;font-weight:bold">&lt;</span> (<span style="color:#000;font-weight:bold">const</span> Val<span style="color:#000;font-weight:bold">&amp;</span> A) <span style="color:#000;font-weight:bold">const</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> a <span style="color:#000;font-weight:bold">&lt;</span> A.a;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>multiset<span style="color:#000;font-weight:bold">&lt;</span>Val<span style="color:#000;font-weight:bold">&gt;</span> A;
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n;
-</span></span><span style="display:flex;"><span>ll l, r;
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">char</span> s[N];
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> ans;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">dfs</span>(<span style="color:#458;font-weight:bold">int</span> cur, <span style="color:#458;font-weight:bold">int</span> u, <span style="color:#458;font-weight:bold">int</span> fa, ll val) {
-</span></span><span style="display:flex;"><span>    val <span style="color:#000;font-weight:bold">=</span> val <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">+</span> (s[u] <span style="color:#000;font-weight:bold">-</span> <span style="color:#d14">&#39;0&#39;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (val <span style="color:#000;font-weight:bold">&gt;</span> r) <span style="color:#000;font-weight:bold">return</span> ;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (val <span style="color:#000;font-weight:bold">&gt;=</span> l <span style="color:#000;font-weight:bold">&amp;&amp;</span> u <span style="color:#000;font-weight:bold">!=</span> cur) ans <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">v</span>: g[u]) {
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (v <span style="color:#000;font-weight:bold">==</span> fa) <span style="color:#000;font-weight:bold">continue</span> ;
-</span></span><span style="display:flex;"><span>        dfs(cur, v, u, val);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">solve</span>() {
-</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d%lld%lld&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n, <span style="color:#000;font-weight:bold">&amp;</span>l, <span style="color:#000;font-weight:bold">&amp;</span>r);
-</span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%s&#34;</span>, s <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;</span> n; <span style="color:#000;font-weight:bold">++</span>i) {
-</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> a, b;
-</span></span><span style="display:flex;"><span>        scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>a, <span style="color:#000;font-weight:bold">&amp;</span>b);
-</span></span><span style="display:flex;"><span>        g[a].push_back(b);
-</span></span><span style="display:flex;"><span>        g[b].push_back(a);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) {
-</span></span><span style="display:flex;"><span>        dfs(i, i, <span style="color:#099">0</span>, <span style="color:#099">0</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, ans);
-</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> T <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//    scanf(&#34;%d&#34;, &amp;T);
-</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">while</span> (T<span style="color:#000;font-weight:bold">--</span>) {
-</span></span><span style="display:flex;"><span>        solve();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="d01串的回文子串">D.01串的回文子串</h2>
-<p><strong>题意：</strong></p>
-<p>给定 $n$ 个数 $a_i$，当 $i$ 为奇数，表示生成 $a_i$ 个 <code>1</code>，当 $i$ 为偶数，表示生成 $a_i$ 个 <code>0</code>。即生成一个长度为 $\sum\limits_{i=1}^n a_i$ 的序列 $s$，$s[1, a_1]=1,s[a_1+1,a_2]=0,s[a_2+1,a_3]=1,s[a_3+1,a_4]=0,&hellip;$ 。问这个序列中有多少个回文子串。答案对 $10^9+7$ 取模</p>
-<p>数据范围：
-$1\leq n\leq 1000,1\leq a_i\leq 10^9$</p>
-<p><strong>题解：</strong></p>
-<p>可以将看成序列看成分为 $n$ 块，每块内部都是连续的 $0$ 或 $1$。</p>
-<p>考虑每块内部可以生成多少回文子串：一块内部有 $x$ 个数，以第 $i$ 个数结尾的回文子串数量为 $i$ ，即 $\sum\limits_{i=1}^xi=\frac{x\times (x+1)}{2}$</p>
-<p>再考虑包含第 $i$ 块的回文子串数量。那么以第 $i$ 块为回文子串中心，向左右扩展。当且仅当左右两个数都相同，会多生成一个回文子串。这个什么时候截止呢，假设我们当前 $a[i-1]=a[i+1],a[i-2]=a[i+2],&hellip;a[i-p]=a[i+p]$，但是 $a[i-p-1]\neq a[i+p+1]$，则生成的回文子串数为：$min(a[i-p-1],a[i+p+1])+\sum\limits_{j=1}^p a[j]$</p>
-<p>时间复杂度：$O(n^2)$</p>
-<p><strong>代码：</strong></p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
-</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1010</span>;
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> mod <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1e9</span> <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">7</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">long</span> <span style="color:#458;font-weight:bold">long</span> a[N];
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">solve</span>() {
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">long</span> <span style="color:#458;font-weight:bold">long</span> ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
 </span></span><span style="display:flex;"><span>    scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n);
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) {
-</span></span><span style="display:flex;"><span>        scanf(<span style="color:#d14">&#34;%lld&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>a[i]);
-</span></span><span style="display:flex;"><span>        ans <span style="color:#000;font-weight:bold">=</span> (ans <span style="color:#000;font-weight:bold">+</span> a[i] <span style="color:#000;font-weight:bold">*</span> (a[i] <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>) <span style="color:#000;font-weight:bold">%</span> mod;
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>q[i].a), q[i].id <span style="color:#000;font-weight:bold">=</span> i;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>q[i].b);
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>q[i].c), ans <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1ll</span> <span style="color:#000;font-weight:bold">*</span> q[i].c <span style="color:#000;font-weight:bold">*</span> q[i].b;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">2</span>; i <span style="color:#000;font-weight:bold">&lt;</span> n; <span style="color:#000;font-weight:bold">++</span>i) {
-</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> L <span style="color:#000;font-weight:bold">=</span> i <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>, R <span style="color:#000;font-weight:bold">=</span> i <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">while</span> (L <span style="color:#000;font-weight:bold">&gt;=</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&amp;&amp;</span> R <span style="color:#000;font-weight:bold">&lt;=</span> n) {
-</span></span><span style="display:flex;"><span>            ans <span style="color:#000;font-weight:bold">=</span> (ans <span style="color:#000;font-weight:bold">+</span> min(a[L], a[R])) <span style="color:#000;font-weight:bold">%</span> mod;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (a[L] <span style="color:#000;font-weight:bold">==</span> a[R]) L <span style="color:#000;font-weight:bold">-=</span> <span style="color:#099">1</span>, R <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    sort(q <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>, q <span style="color:#000;font-weight:bold">+</span> n <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>, [](<span style="color:#000;font-weight:bold">const</span> Node<span style="color:#000;font-weight:bold">&amp;</span> A, <span style="color:#000;font-weight:bold">const</span> Node<span style="color:#000;font-weight:bold">&amp;</span> B) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> A.c <span style="color:#000;font-weight:bold">&gt;</span> B.c;
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 按照 c 从大到小去考虑，对于每个 c ，去考虑小于等于其 space 的还可以使用的套娃最大是多少
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) A.insert({q[i].a, q[i].id});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">// 找到小于等于 q[i].b 的最大的 q[j].a，但是 j != i
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">auto</span> it <span style="color:#000;font-weight:bold">=</span> A.upper_bound({q[i].b, <span style="color:#099">0</span>});
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (it <span style="color:#000;font-weight:bold">==</span> A.begin()) <span style="color:#000;font-weight:bold">continue</span> ;
+</span></span><span style="display:flex;"><span>        it<span style="color:#000;font-weight:bold">--</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (it<span style="color:#000;font-weight:bold">-&gt;</span>id <span style="color:#000;font-weight:bold">==</span> q[i].id) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (it <span style="color:#000;font-weight:bold">==</span> A.begin()) <span style="color:#000;font-weight:bold">continue</span> ;
+</span></span><span style="display:flex;"><span>            it<span style="color:#000;font-weight:bold">--</span>;
 </span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        ans <span style="color:#000;font-weight:bold">-=</span> <span style="color:#099">1ll</span> <span style="color:#000;font-weight:bold">*</span> q[i].c <span style="color:#000;font-weight:bold">*</span> (it<span style="color:#000;font-weight:bold">-&gt;</span>a);
+</span></span><span style="display:flex;"><span>        A.erase(it);
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    printf(<span style="color:#d14">&#34;%lld</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, ans);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> T <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//    scanf(&#34;%d&#34;, &amp;T);
-</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">while</span> (T<span style="color:#000;font-weight:bold">--</span>) {
-</span></span><span style="display:flex;"><span>        solve();
-</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
 </span></span><span style="display:flex;"><span>}
