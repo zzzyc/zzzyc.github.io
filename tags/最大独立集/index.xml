@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>最大独立集 on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/</link>
+    <description>Recent content in 最大独立集 on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Sun, 30 Apr 2023 15:53:56 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>二分图的相关性质</title>
+      <link>https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/</link>
+      <pubDate>Sun, 30 Apr 2023 15:53:56 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/</guid>
+      <description>二分图的相关性质</description>
+    </item>
+    
+  </channel>
+</rss>
