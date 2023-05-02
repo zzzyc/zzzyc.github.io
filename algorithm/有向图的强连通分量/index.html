@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>有向图的强连通分量 | solego&#39;s blog</title>
+    <meta property="og:title" content="有向图的强连通分量 - solego&#39;s blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2023-05-02T20:07:22&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-05-02T20:07:22&#43;08:00'>
+        
+    <meta name="Keywords" content="">
+    <meta name="description" content="有向图的强连通分量">
+        
+    <meta name="author" content="solego">
+    <meta property="og:url" content="https://zzzyc.github.io/algorithm/%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zzzyc.github.io/">
+                        solego&#39;s blog
+                    </a>
+                
+                <p class="description">迷茫中找寻归途</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="" href="https://zzzyc.github.io/">首页</a>
+                    
+                    <a  href="https://zzzyc.github.io/cs/" title="CS">CS</a>
+                    
+                    <a  href="https://zzzyc.github.io/algorithm/" title="算法">算法</a>
+                    
+                    <a  href="https://zzzyc.github.io/solution/" title="题解">题解</a>
+                    
+                    <a  href="https://zzzyc.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zzzyc.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">有向图的强连通分量</h1>
+        </header>
+        
+  <time datetime="2023-05-02T12:07:22Z" class="post-meta meta-date dt-published">
+    2023年5月2日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='/categories/%E7%AE%97%E6%B3%95' target="_blank">算法</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="强连通分量的定义">强连通分量的定义</h2>
+<p>强连通分量是对于有向图来说的。通常，我们在对有向图做一些操作时，都是指在有向无环图（DAG, Directed Asyclic Graph） 来说的。所以将一个有向有环图转换为有向无环图是很有必要的。</p>
+<p>对于一个有向图 $G(V, E)$ ，对于任意两个点 $x\in V, y\in V, x \neq y$ ，既存在 $x$ 到 $y$ 的路径，也存在 $y$ 到 $x$ 的路径，则称这个图是强连通图。</p>
+<p>强连通分量 （SCC,  Strongly Connected Component）是指一个有向图的极大强连通子图。</p>
+<p>即：对于每个分量，在其中加入其他点，使得点数最多，且任意两个点都有一条互相可达的路径。</p>
+<p>对于一个有向图，每个点都属于一个强连通分量，求出一个有向图的所有的强连通分量，将每个强连通分量看成一个点，这称为缩点。缩点后，就一定是一个有向无环图。</p>
+<p>那么问题就转换为了如何求强连通分量。</p>
+<h2 id="求强连通分量的相关介绍">求强连通分量的相关介绍</h2>
+<p>这里抛出几个概念：</p>
+<h3 id="dfn">dfn</h3>
+<p>dfn[i] 表示先按照 dfs 遍历点的先后顺序，第 i 个点是在第 dfn[i] 次访问一个新点时被访问到的，也叫作访问时间戳。</p>
+<p>
+        <img class="mx-auto" alt="" src="/images/7.png" />   
+    
+上面这个图，从 1 号点开始 dfs ，则 dfn 下图所示：</p>
+<p>
+        <img class="mx-auto" alt="" src="/images/8.png" />   
+    </p>
+<p>即 dfs 遍历点的顺序为：1-&gt;2-&gt;4-&gt;3-&gt;5-&gt;6</p>
+<p>以此，我们来介绍这个 dfs 搜索树上的四种边。</p>
+<ul>
+<li>树枝边 (x, y)，如图黑色边 ，在搜索树上，点 x 是点 y 的父亲节点，且 <code>dfn[x] &lt; dfn[y]</code></li>
+<li>前向边 (x, y)，如图黄色边 ，在搜索树上，点 x 是点 y 的祖先节点，且 <code>dfn[x] &lt; dfn[y]</code></li>
+<li>后向边 (x, y)，如图红色边 ，在搜索树上，点 y 是点 x 的祖先节点，且 <code>dfn[x] &gt; dfn[y]</code></li>
+<li>横叉边 (x, y)，如图绿色边 ，在搜索树上，两者不存在祖先和子辈的关系，即这两个点在 dfs 树上是他们 lca 下的不同子树的，且 <code>dfn[x] &gt; dfn[y]</code></li>
+</ul>
+<h3 id="low">low</h3>
+<p>low[u] 表示从 u 开始，遍历点 u 的子树，可以到达的最小的时间戳。</p>
+<ul>
+<li>第一种情况：点 u 的儿子 v 还未被遍历，此时更新方式为 <code>low[u] = min(low[u], low[v])</code></li>
+<li>第二种情况：点 u 的儿子 v 已经在之前作为其他点的子树被遍历过了，但是还未结束遍历，此时更新方式为 <code>low[u] = min(low[u], dfn[v])</code>， <code>u-&gt;v</code> 要么是后向边，<code>u-&gt;v</code> 要么是横叉边，故此时通过 dfn[v] 去更新 low[u]，一定有更新后的 low[u] &lt; dfn[u]。故：如果 v 在一个环中，u 也可以加入这个环，与他们一起构成一个连通分量。</li>
+</ul>
+<p>事实上，这里取 low[u] = min(low[u], low[v]) 对于求强连通分量是无影响的，但是存在部分 low 的值与其定义不一致。</p>
+<p>这块实际需要区分是针对求解 无向图的边双连通分量 的时候的，为了避免错误，建议还是区分一下。</p>
+<h3 id="stack">stack</h3>
+<p>stack 表示栈中的元素，这个栈是存储从当前 u 开始的子树遍历到的所有点，当遍历结束后，如果发现 <code>dfn[u] == low[u]</code> ，则 u 是其所在连通分量 SCC 中 dfn 最小的点，那么就说明已经找完了 SCC 中所有的点，pop 出栈直到 pop 出 u 截止，即 SCC 中所有的点。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// tarjan 模板
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>vector<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">&gt;</span> g[N]; <span style="color:#998;font-style:italic">// vector 存储图
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#458;font-weight:bold">int</span> dfn[N], low[N], tim;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> stk[N], top;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> in_stk[N];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> scc[N]; <span style="color:#998;font-style:italic">// scc[u] 表示点 u 所在的 SCC 的编号
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#458;font-weight:bold">int</span> sz[N];  <span style="color:#998;font-style:italic">// sz[i] 表示编号为 i 的 SCC 的大小
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#458;font-weight:bold">int</span> scc_cnt; <span style="color:#998;font-style:italic">// 表示 SCC 的数量
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">tarjan</span>(<span style="color:#458;font-weight:bold">int</span> u) {
+</span></span><span style="display:flex;"><span>    dfn[u] <span style="color:#000;font-weight:bold">=</span> low[u] <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">++</span>tim;
+</span></span><span style="display:flex;"><span>    stk[<span style="color:#000;font-weight:bold">++</span>top] <span style="color:#000;font-weight:bold">=</span> u;
+</span></span><span style="display:flex;"><span>    in_stk[u] <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">v</span>: g[u]) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[v]) {
+</span></span><span style="display:flex;"><span>            tarjan(v);
+</span></span><span style="display:flex;"><span>            low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], low[v]);
+</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">if</span> (in_stk[v]) {
+</span></span><span style="display:flex;"><span>            low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], dfn[v]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (dfn[u] <span style="color:#000;font-weight:bold">==</span> low[u]) {
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> y; <span style="color:#000;font-weight:bold">++</span>scc_cnt;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">do</span> {
+</span></span><span style="display:flex;"><span>            y <span style="color:#000;font-weight:bold">=</span> stk[top<span style="color:#000;font-weight:bold">--</span>];
+</span></span><span style="display:flex;"><span>            in_stk[y] <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">false</span>;
+</span></span><span style="display:flex;"><span>            scc[y] <span style="color:#000;font-weight:bold">=</span> scc_cnt;
+</span></span><span style="display:flex;"><span>            sz[scc_cnt] <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">while</span> (y <span style="color:#000;font-weight:bold">!=</span> u);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) 
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[i]) tarjan(i);
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+        </div>
+
+        
+
+
+        
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F' target="_blank">强连通分量</a></li>
+                
+                <li><a href='/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F' target="_blank">拓扑排序</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="https://zzzyc.github.io/">solego&#39;s blog By solego</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zzzyc.github.io/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zzzyc.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="有向图的强连通分量" target="_blank">有向图的强连通分量</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/" title="二分图的相关性质" target="_blank">二分图的相关性质</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84%E7%9A%84DFS%E5%AD%98%E5%82%A8%E9%A1%BA%E5%BA%8F/" title="欧拉路径的DFS存储顺序" target="_blank">欧拉路径的DFS存储顺序</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" title="树状数组的使用总结" target="_blank">树状数组的使用总结</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/" title="谈谈最近" target="_blank">谈谈最近</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/" title="新的博客，新的生活" target="_blank">新的博客，新的生活</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/">笔试 (3)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (4)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">闲谈 (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BA%8C%E5%88%86%E5%9B%BE/">二分图</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">强连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">拓扑排序</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E5%9B%A2/">最大团</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/">最大独立集</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E8%BE%B9%E5%8C%B9%E9%85%8D/">最大边匹配</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E7%82%B9%E8%A6%86%E7%9B%96/">最小点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E9%87%8D%E5%A4%8D%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小重复路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E8%BF%91/">最近</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
+    
+</div>
+    </section>
+
+    
+
+    
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
