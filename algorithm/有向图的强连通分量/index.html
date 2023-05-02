@@ -136,10 +136,19 @@
 <li>第一种情况：点 u 的儿子 v 还未被遍历，此时更新方式为 <code>low[u] = min(low[u], low[v])</code></li>
 <li>第二种情况：点 u 的儿子 v 已经在之前作为其他点的子树被遍历过了，但是还未结束遍历，此时更新方式为 <code>low[u] = min(low[u], dfn[v])</code>， <code>u-&gt;v</code> 要么是后向边，<code>u-&gt;v</code> 要么是横叉边，故此时通过 dfn[v] 去更新 low[u]，一定有更新后的 low[u] &lt; dfn[u]。故：如果 v 在一个环中，u 也可以加入这个环，与他们一起构成一个连通分量。</li>
 </ul>
-<p>事实上，这里取 low[u] = min(low[u], low[v]) 对于求强连通分量是无影响的，但是存在部分 low 的值与其定义不一致。</p>
-<p>这块实际需要区分是针对求解 无向图的边双连通分量 的时候的，为了避免错误，建议还是区分一下。</p>
+<p>事实上，这里取 low[u] = min(low[u], low[v]) 对于求强连通分量是无影响的，个人认为是正确的。
+因为在 tarjan 这个算法的论文中的定义为：low 是最多通过一条反向边能到达的最小 dfn ，我们这里将 <code>u-&gt;v</code> 认为是一条反向边。但是实际上这个 low 最多通过一条反向边的限制并没有什么用，所以这里无所谓。</p>
+<p>当然，在求解无向图的双连通分量时，这样更新 low 就会出现错误，所以这样的正确更新仅存在于有向图的强连通分量的求解。</p>
+<p>为了不出错，也为了尊重作者，建议第二种情况还是使用论文中的更新方式，即 <code>low[u] = min(low[u], dfn[v])</code> 来更新。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><strong>写完无向图的双连通分量后，再来解释</strong>
+这块实际会对求解产生错误的情况，实际是在针对求解 无向图的边双连通分量 的时候的，为了避免错误，建议还是统一一下。</p>
 <h3 id="stack">stack</h3>
 <p>stack 表示栈中的元素，这个栈是存储从当前 u 开始的子树遍历到的所有点，当遍历结束后，如果发现 <code>dfn[u] == low[u]</code> ，则 u 是其所在连通分量 SCC 中 dfn 最小的点，那么就说明已经找完了 SCC 中所有的点，pop 出栈直到 pop 出 u 截止，即 SCC 中所有的点。</p>
+<h2 id="代码模板">代码模板</h2>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
