@@ -6,7 +6,16 @@
     <description>Recent content on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Sat, 06 May 2023 15:45:36 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 May 2023 19:51:39 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数据对拍器</title>
+      <link>https://zzzyc.github.io/algorithm/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/</link>
+      <pubDate>Sat, 06 May 2023 19:51:39 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/algorithm/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/</guid>
+      <description>数据对拍器</description>
+    </item>
+    
     <item>
       <title>UTF-8编码介绍</title>
       <link>https://zzzyc.github.io/cs/UTF-8%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D/</link>
