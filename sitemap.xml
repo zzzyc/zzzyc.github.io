@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://zzzyc.github.io/temp/</loc>
+    <lastmod>2023-05-07T22:43:06+08:00</lastmod>
+  </url><url>
     <loc>https://zzzyc.github.io/categories/</loc>
     <lastmod>2023-05-06T19:51:39+08:00</lastmod>
   </url><url>
@@ -14,13 +17,13 @@
     <loc>https://zzzyc.github.io/tags/%E5%AF%B9%E6%8B%8D/</loc>
     <lastmod>2023-05-06T19:51:39+08:00</lastmod>
   </url><url>
+    <loc>https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2023-05-06T19:51:39+08:00</lastmod>
+  </url><url>
     <loc>https://zzzyc.github.io/algorithm/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/</loc>
     <lastmod>2023-05-06T19:51:39+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/algorithm/</loc>
-    <lastmod>2023-05-06T19:51:39+08:00</lastmod>
-  </url><url>
-    <loc>https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2023-05-06T19:51:39+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/categories/CS/</loc>
@@ -130,9 +133,6 @@
   </url><url>
     <loc>https://zzzyc.github.io/about/</loc>
     <lastmod>2023-04-21T16:00:45+08:00</lastmod>
-  </url><url>
-    <loc>https://zzzyc.github.io/what/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://zzzyc.github.io/archives/</loc>
   </url><url>
