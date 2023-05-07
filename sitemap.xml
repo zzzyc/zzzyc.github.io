@@ -2,13 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://zzzyc.github.io/categories/</loc>
-    <lastmod>2023-05-06T19:51:39+08:00</lastmod>
+    <loc>https://zzzyc.github.io/tags/LeetCode/</loc>
+    <lastmod>2023-05-07T17:24:48+08:00</lastmod>
+  </url><url>
+    <loc>https://zzzyc.github.io/solution/20230507_LeetCode-2023Spring/</loc>
+    <lastmod>2023-05-07T17:24:48+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/</loc>
-    <lastmod>2023-05-06T19:51:39+08:00</lastmod>
+    <lastmod>2023-05-07T17:24:48+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/tags/</loc>
+    <lastmod>2023-05-07T17:24:48+08:00</lastmod>
+  </url><url>
+    <loc>https://zzzyc.github.io/solution/</loc>
+    <lastmod>2023-05-07T17:24:48+08:00</lastmod>
+  </url><url>
+    <loc>https://zzzyc.github.io/categories/</loc>
     <lastmod>2023-05-06T19:51:39+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/tool/</loc>
@@ -81,9 +90,6 @@
     <lastmod>2023-04-29T13:39:28+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/</loc>
-    <lastmod>2023-04-29T13:39:28+08:00</lastmod>
-  </url><url>
-    <loc>https://zzzyc.github.io/solution/</loc>
     <lastmod>2023-04-29T13:39:28+08:00</lastmod>
   </url><url>
     <loc>https://zzzyc.github.io/research/conference/</loc>
