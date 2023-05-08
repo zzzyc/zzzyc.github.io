@@ -9,20 +9,20 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>Conference | solego&#39;s blog</title>
-    <meta property="og:title" content="Conference - solego&#39;s blog">
+    <title>从零开始的JSON库教程随记 | solego&#39;s blog</title>
+    <meta property="og:title" content="从零开始的JSON库教程随记 - solego&#39;s blog">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2023-04-28T14:08:00&#43;08:00'>
+    <meta property="article:published_time" content='2023-05-03T11:56:15&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2023-04-28T14:08:00&#43;08:00'>
+    <meta property="article:modified_time" content='2023-05-03T11:56:15&#43;08:00'>
         
     <meta name="Keywords" content="">
-    <meta name="description" content="Conference">
+    <meta name="description" content="从零开始的JSON库教程随记">
         
     <meta name="author" content="solego">
-    <meta property="og:url" content="https://zzzyc.github.io/research/conference/">
+    <meta property="og:url" content="https://zzzyc.github.io/cs/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84JSON%E5%BA%93%E6%95%99%E7%A8%8B%E9%9A%8F%E8%AE%B0/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -78,16 +78,145 @@
                 <div class="col-8" id="main">
                     
 <div class="res-cons">
-    
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#tutorial01">tutorial01</a>
+      <ul>
+        <li><a href="#对于写单元测试的-1-个点">对于写单元测试的 1 个点</a></li>
+      </ul>
+    </li>
+    <li><a href="#tutorial02">tutorial02</a>
+      <ul>
+        <li><a href="#对于判断一个数是否是number">对于判断一个数是否是number</a></li>
+        <li><a href="#将一个-str-转换为-double-类型的浮点数">将一个 str 转换为 double 类型的浮点数</a></li>
+        <li><a href="#errno-和-huge_val">errno 和 HUGE_VAL</a></li>
+      </ul>
+    </li>
+    <li><a href="#tutorial03">tutorial03</a>
+      <ul>
+        <li><a href="#关于json字符串测试的问题">关于JSON字符串测试的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#tutorial04">tutorial04</a>
+      <ul>
+        <li><a href="#unicode编码以utf-8编码为例">Unicode编码，以UTF-8编码为例。</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
     <article class="post">
         <header>
-            <h1 class="post-title">Conference</h1>
+            <h1 class="post-title">从零开始的JSON库教程随记</h1>
         </header>
         
-  <time datetime="2023-04-28T06:08:00Z" class="post-meta meta-date dt-published">
-    2023年4月28日
+  <time datetime="2023-05-03T03:56:15Z" class="post-meta meta-date dt-published">
+    2023年5月3日
   </time>
 
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='/categories/CS' target="_blank">CS</a>
+  
+</div>
 
 
         
@@ -98,8 +227,46 @@
         </div>
         
         
+        <div class="clear" style="display: none">
+            <div class="toc-article">
+                <div class="toc-title">文章目录</div>
+            </div>
+        </div>
+        
         <div class="post-content">
-            <h2 id="学术讲座智能网联系统的隐私风险与防护研究">学术讲座：智能网联系统的隐私风险与防护研究</h2>
+            <h2 id="tutorial01">tutorial01</h2>
+<h3 id="对于写单元测试的-1-个点">对于写单元测试的 1 个点</h3>
+<p>以 gcc 编译为例，如果在编译时采用的编译选项为：<code>g++ -Wall -Wunused-function test.cpp -o test</code></p>
+<p>对于单元测试的函数，其只会在 <code>test.cpp</code> 中被调用，如果写了测试函数却未被调用，肯定是有缺漏的。
+如果不添加 <code>static</code> 来修饰测试函数，则编译器会认为该函数可能会被其他文件中的函数调用，故不会提示函数未被调用 <code>-Wunused-function</code>
+添加之后，<code>static</code> 函数只能由 <code>test.cpp</code> 中的函数调用，所以如果写了测试函数却未被调用，就会提示，避免测试缺漏的情况。</p>
+<h2 id="tutorial02">tutorial02</h2>
+<h3 id="对于判断一个数是否是number">对于判断一个数是否是number</h3>
+<p>看了作者写的 number 判断，感觉自己貌似是想的复杂的多，的确，一个 number 的整数部分不可或缺，其他部分都可。
+分为如下几部分：</p>
+<ul>
+<li>是否为负数（默认正数开头不存在 <code>+</code>）</li>
+<li>整数部分是否为 0 或者 不含前导0的整数</li>
+<li>是否有小数点，小数点后至少带一个整数数字</li>
+<li>是否有 e / E，表示科学计数法，判断 e / E 之后是否有 <code>+/-</code>，然后判断是否至少带一个整数数字</li>
+</ul>
+<p>确实很清晰。</p>
+<h3 id="将一个-str-转换为-double-类型的浮点数">将一个 str 转换为 double 类型的浮点数</h3>
+<p><code>stdlib.h</code> 中的函数 <code>strtod</code></p>
+<p><code>double strtod(const char* str, char** endstr)</code></p>
+<p>传入 <code>str</code> ，用于将 <code>str[0]</code> 开始的部分转换为浮点数，如果转换成功，则 <code>endstr</code> 替换为浮点数的最后一个字符在 <code>str</code> 中的位置。</p>
+<p>这里使用 <code>endstr</code> 是因为我们需要修改指针的值，指针的值是地址，所以我们需要传入二级指针来操作一级指针的值。</p>
+<h3 id="errno-和-huge_val">errno 和 HUGE_VAL</h3>
+<p>Linux 中，上一次操作会有一个 errno ，如果 errno = 0，表示上一次操作没有错误，如果 errno 不为 0，表示这是一个错误码，用来表示上次操作的错误类型。
+C 中也可以使用，在 <code>errno.h</code> 中有一个全局变量 errno 。</p>
+<p>HUGE_VAL 是一个宏，表示 double 类型的正无穷大，大于任意 double 类型的值，一般使用 HUGE_VAL 会与 errno 联合使用，当出现 HUGE_VAL 时，errno = ERANGE。</p>
+<h2 id="tutorial03">tutorial03</h2>
+<h3 id="关于json字符串测试的问题">关于JSON字符串测试的问题</h3>
+<p>在给任何 <code>lept_value* v</code> 赋值前，要先清空，即 <code>lept_free(v)</code> ，为了防止 <code>string</code> 的内存未释放。
+<code>lept_set_xx()</code> 操作第一是 <code>lept_free</code> ，第二是赋值，第三是设置数据类型。</p>
+<p>对于字符串类型，我们需要考虑带转义字符的部分。在学习这个教程的时候，需要提醒自己，JSON串和字符串是不一样的，JSON串需要通过解析得到C++的字符串，故每个C++中的字符都需要被严格表示，即如果是 C++ 中的换行符 <code>\n</code> ，在 JSON 串中应该表示为 <code>&quot;\\n&quot;</code>。对于 JSON 串中的空串，应该用 <code>&quot;\&quot;\&quot;&quot;</code> 去表示。<code>\&quot;</code> 表示一个 <code>&quot;</code>。</p>
+<p>这里需要注意的是，我们看到的代码中进行测试的部分的最外面两个引号，是为了使用 C++ 字符串字面量，这会被编译器自动识别，认为其是一个字符串，实际内部的内容才是字符串的内容。故我们需要用 <code>\&quot;</code> 来表示字符串的引号。</p>
+<p>比如：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -107,17 +274,15 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>时间：4月28日（周五）下午14:00-15:00
-</span></span><span style="display:flex;"><span>地点：苏大天赐庄校区理工楼635
-</span></span><span style="display:flex;"><span>主讲人：孟岩，上海交通大学计算机科学与工程系助理研究员。
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&#34;hello&#34;</span>: <span style="color:#d14">&#34;world&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="privacy-issue">privacy issue</h3>
-<h4 id="aiot">AIoT</h4>
-<h4 id="device-layer">device layer</h4>
-<p>mobile payment</p>
-<h4 id="networktraffic-layer">network/traffic layer</h4>
-<h4 id="application-layer">application layer</h4>
+</div><p>解析出来就是一个 <code>map</code> ，<code>map</code> 中存储了 key 为 <code>hello</code>，value 为 &ldquo;world&rdquo; ，那么对于这个 world ，在 C++ 中的表示为：<code>&quot;\&quot;world\&quot;&quot;</code></p>
+<h2 id="tutorial04">tutorial04</h2>
+<h3 id="unicode编码以utf-8编码为例">Unicode编码，以UTF-8编码为例。</h3>
+<p><a href="../UTF-8%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D">UTF-8介绍</a></p>
 
         </div>
 
@@ -129,7 +294,13 @@
 
         <div class="post-meta meta-tags">
             
-            没有标签
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95' target="_blank">单元测试</a></li>
+                
+                <li><a href='/tags/JSON' target="_blank">JSON</a></li>
+                
+            </ul>
             
         </div>
     </article>
