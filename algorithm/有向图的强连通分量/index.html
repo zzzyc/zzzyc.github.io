@@ -71,6 +71,17 @@
     </div>
 </header>
 
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
     <div id="body">
         <div class="container">
             <div class="col-group">
@@ -117,13 +128,9 @@
 <p>这里抛出几个概念：</p>
 <h3 id="dfn">dfn</h3>
 <p>dfn[i] 表示先按照 dfs 遍历点的先后顺序，第 i 个点是在第 dfn[i] 次访问一个新点时被访问到的，也叫作访问时间戳。</p>
-<p>
-        <img class="mx-auto" alt="" src="/images/7.png" />   
-    
-上面这个图，从 1 号点开始 dfs ，则 dfn 下图所示：</p>
-<p>
-        <img class="mx-auto" alt="" src="/images/8.png" />   
-    </p>
+<img src="/images/7.png" style="zoom:33%;"/>
+上面这个图，从 1 号点开始 dfs ，则 dfn 下图所示：
+<img src="/images/8.png" style="zoom:33%;"/>
 <p>即 dfs 遍历点的顺序为：1-&gt;2-&gt;4-&gt;3-&gt;5-&gt;6</p>
 <p>以此，我们来介绍这个 dfs 搜索树上的四种边。</p>
 <ul>
@@ -142,10 +149,22 @@
 因为在 tarjan 这个算法的论文中的定义为：low 是最多通过一条反向边能到达的最小 dfn ，我们这里将 <code>u-&gt;v</code> 认为是一条反向边。但是实际上这个 low 最多通过一条反向边的限制并没有什么用，所以这里无所谓。</p>
 <p>当然，在求解无向图的双连通分量时，这样更新 low 就会出现错误，所以这样的正确更新仅存在于有向图的强连通分量的求解。</p>
 <p>为了不出错，也为了尊重作者，建议第二种情况还是使用论文中的更新方式，即 <code>low[u] = min(low[u], dfn[v])</code> 来更新。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!-- （即个人认为的是 `low[u] = min(low[u], dfn[v])` 更新方式是错误的。）
+因为在实际情况下，对于同一个连通分量内的元素，其 low 值应该相同，说明了他们可以到达连通分量中时间戳最小的点，而因为在 low[u] == dfn[u] 时才会让元素出栈，这说明 u 可以到达这些被弹出栈的点，所以这就满足了强连通。但是考虑这种情况： -->
+<!-- ![](/images/9.png)
+
+上图中两个取 `min` 都是针对第二种情况的，对于第一种情况，其更新方式仍然为 `low[u] = min(low[u], low[v])`
+可以看到，当我们取 `low[u] = min(low[u], low[v])` 这种方式来更新第二种情况时，`low[5] = 2` ，这是从 5 开始可以到达的最小的 dfn ，但是 5 并不处于 2 是同一个强连通分量中，这里有三个强连通分量：{1}、{2,3,4}、{5}。`low[5] = 2`，意思应该是从 5 出发可以到达的最小的时间戳对应的点是 2 。而 `dfn[2] = low[2] = 2` ，所以点 2 是其所在的强连通分量 SCC 的时间戳最小的点，当 2 的子树遍历结束后，就开始统计 SCC 中的点。
+
+再来看更新方式为 `low[u] = min(low[u], dfn[v])` ，此时 `low[5] = 4` ，但是 4 并不是其所在强连通分量 SCC 中时间戳最小的点，即 `low[4] != dfn[4]` ，所以这里也就意味着 5 可以沿着其子树走到 4，但是 4 并不能走到 5，这主要是因为 `low[4] < dfn[4]` ，所以 4 并不是一个开始统计 SCC 的点。
+
+![](/images/10.png)
+如上图所示，`first[u]` 表示第一次遍历结束 `u` 这个点的时间戳，`second[u]` 表示结束遍历 `u` 的子树的结束时间戳，而 `first[u]` 到 `second[u]` 是 `u` 这个点可以遍历的所有的对应时间戳（存储一下每个时间戳对应的点即可以得到 u 可以到达的所有点）。
+
+对于这个图，5 的确可以通过 4 到达 2，这产生了一条 5 到 2 的路径，但是 first[2] = 2, second[2] = 4, 说明 2 只能到达时间戳在 [2, 4] 之间的点，即 {2, 3, 4}，不包括点 5，所以 5 不能作为 2 号点所在强连通分量中的一个点。
+
+![](/images/11.png)
+如上图所示，此时 5 号点可以通过 3 号点，到达 4 号点，再到达 2 号点，说明存在一条 5 到 2 的路径，且 first[2] = 2, second[2] = 5, 说明 2 能到达时间戳在 [2, 5] 之间的点，即{2, 3, 4, 5}，则存在一条 2 号点到 5 号点的路径，那么 5 就可以作为 2 号点所在强连通分量中的一点。 -->
 <p><strong>写完无向图的双连通分量后，再来解释</strong>
 这块实际会对求解产生错误的情况，实际是在针对求解 无向图的边双连通分量 的时候的，为了避免错误，建议还是统一一下。</p>
 <h3 id="stack">stack</h3>
@@ -322,6 +341,10 @@
 <ul class="widget-list">
     
     <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="无向图的双连通分量" target="_blank">无向图的双连通分量</a>
+    </li>
+    
+    <li>
         <a href="https://zzzyc.github.io/tool/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/" title="数据对拍器" target="_blank">数据对拍器</a>
     </li>
     
@@ -372,7 +395,7 @@
     
     <li><a href="https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/">笔试 (3)</a></li>
     
-    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (4)</a></li>
+    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (5)</a></li>
     
     <li><a href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">闲谈 (2)</a></li>
     
@@ -420,6 +443,10 @@
     <a href="https://zzzyc.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
     
     <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
     
 </div>
     </section>

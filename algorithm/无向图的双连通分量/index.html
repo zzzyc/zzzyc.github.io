@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>无向图的双连通分量 | solego&#39;s blog</title>
+    <meta property="og:title" content="无向图的双连通分量 - solego&#39;s blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2023-05-07T00:32:56&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-05-07T00:32:56&#43;08:00'>
+        
+    <meta name="Keywords" content="">
+    <meta name="description" content="无向图的双连通分量">
+        
+    <meta name="author" content="solego">
+    <meta property="og:url" content="https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zzzyc.github.io/">
+                        solego&#39;s blog
+                    </a>
+                
+                <p class="description">迷茫中找寻归途</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="" href="https://zzzyc.github.io/">首页</a>
+                    
+                    <a  href="https://zzzyc.github.io/cs/" title="CS">CS</a>
+                    
+                    <a  href="https://zzzyc.github.io/algorithm/" title="算法">算法</a>
+                    
+                    <a  href="https://zzzyc.github.io/tool/" title="工具">工具</a>
+                    
+                    <a  href="https://zzzyc.github.io/solution/" title="题解">题解</a>
+                    
+                    <a  href="https://zzzyc.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zzzyc.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">无向图的双连通分量</h1>
+        </header>
+        
+  <time datetime="2023-05-06T16:32:56Z" class="post-meta meta-date dt-published">
+    2023年5月7日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='/categories/%E7%AE%97%E6%B3%95' target="_blank">算法</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>无向图的双连通分量有两种：</p>
+<ul>
+<li>边的双连通分量（E-DCC）</li>
+<li>点的双连通分量（V-DCC）</li>
+</ul>
+<h2 id="边的双连通分量定义">边的双连通分量定义</h2>
+<p>首先引入桥的概念，一个无向连通图的无向边，如果将这条边删除，这个无向图就不连通了，则这条边就是桥，桥也叫割边。
+极大的，不含有桥的连通块，就称为边的双连通分量。</p>
+<img src="/images/12.png" style="zoom:33%;"/>
+<p>如上图所示，<code>3-4</code> 之间的红色边就是桥。</p>
+<h2 id="点的双连通分量定义">点的双连通分量定义</h2>
+<p>首先引入割点的概念，一个无向连通图中，如果将一个点删除后，这个无向图就不连通了，则这个点就是割点。
+极大的，不含有割点的连通块，就称为点的双连通分量。</p>
+<img src="/images/13.png" style="zoom:33%;"/>
+如图所示，3 号点就是割点。
+<p>每个割点，都至少属于两个双连通分量。就比如上面这个图，3号点既属于 {1,2,3} 这个点的双连通分量，也属于{3,4,5} 这个点的双连通分量。</p>
+<p>此外，对于点的双连通分量来说，有一些反直觉的东西。
+比如对于两个割点之间的边，就一定是桥，这是错的。</p>
+<p>对于如下这张图来说，3 是割点，4也是割点，<code>3-4</code> 这条边是桥。
+<img src="/images/12.png" style="zoom:33%;"/></p>
+<p>但是对于如下这张图来说，3 是割点，4 也是割点，<code>3-4</code> 这条黄色边就不是桥。
+<img src="/images/14.png" style="zoom:33%;"/></p>
+<p>同时，有桥也不一定有割点。
+如下图所示，<code>1-2</code> 这条边是桥，但是 1 和 2 都不是割点，删除 1 或者 2，图中都只剩下了一个点。
+<img src="/images/15.png" style="zoom:33%;"/></p>
+<p>总结得出：</p>
+<p>有割点不一定有桥，有桥也不一定有割点。割点和桥没有什么必然联系。</p>
+<p>点连通分量也不一定是边连通分量，边连通分量也不一定是点连通分量。</p>
+<h3 id="简要总结">简要总结</h3>
+<ol>
+<li>
+<p>除了下面这张点的双连通分量，其他任意的点的双连通分量都满足，任意两点之间都满足至少两条点的不重复路径。
+<img src="/images/15.png" style="zoom:33%;"/></p>
+</li>
+<li>
+<p>无向图中任意一个割点都至少存在两个点的双连通分量中。</p>
+</li>
+<li>
+<p>无向图中任意一个不是割点的点，都只存在于一个点的双连通分量中。</p>
+</li>
+</ol>
+<h2 id="点的双连通分量求解">点的双连通分量求解</h2>
+<h3 id="a-namemiao考虑如何求割点a"><a name="miao">考虑如何求割点</a></h3>
+<ul>
+<li><code>dfn[x]</code> 表示第一次访问 <code>x</code> 时，是访问的第 <code>dfn[x]</code> 个点</li>
+<li><code>low[x]</code> 表示 <code>x</code> 从所有的儿子点出发，可以访问到的最小的 <code>dfn</code></li>
+</ul>
+<p>考虑当前点为 <code>u</code> ，枚举的边为 <code>edge</code> ，<code>edge</code> 的另一个点为 <code>v</code>。</p>
+<p>如果 <code>low[v] &gt;= dfn[u]</code> ，考虑如下情况：</p>
+<ul>
+<li>
+<p>如果 u 是根节点，将 u 删除后，至少有两个子节点满足 <code>low[v1] &gt;= dfn[u] &amp;&amp; low[v2] &gt;= dfn[u]</code>，则 u 是割点。</p>
+<p>这里需要至少两个子节点是因为：当 <code>root = u</code> ，在任何情况下，<code>low[root_son] &gt;= dfn[root]</code>，如果 root 只有一个儿子，则删除 root 后，图依旧连通。</p>
+</li>
+<li>
+<p>如果 u 不是根节点，令 root 为根节点，则说明 v 无法通过儿子来到达 <code>root</code> ，因为 <code>low[v] &gt;= dfn[u] &gt; dfn[root]</code> ，则 u 是割点。</p>
+</li>
+</ul>
+<p>来看道题：<a href="https://www.acwing.com/problem/content/1185/">电力</a></p>
+<p><strong>题意：</strong></p>
+<p>给定一个由 n 个点 m 条边构成的无向图，请你求出该图删除一个点之后，连通块最多有多少。</p>
+<p>数据范围：$1\leq n\leq 10000, 1\leq m\leq 15000$</p>
+<p><strong>题解：</strong></p>
+<p>对于无向图进行缩点，然后每个割点删除后，连通块才有可能增多。故问题就是在枚举删除每个割点后，连通块的数量。</p>
+<p>这里并未说明这个图为无向连通图，所以需要遍历每个点。</p>
+<p><strong>代码：</strong></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">10010</span>;
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> M <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">30010</span>;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n, m;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> h[N], e[M], ne[M], idx;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">add</span>(<span style="color:#458;font-weight:bold">int</span> a, <span style="color:#458;font-weight:bold">int</span> b) {
+</span></span><span style="display:flex;"><span>    e[idx] <span style="color:#000;font-weight:bold">=</span> b, ne[idx] <span style="color:#000;font-weight:bold">=</span> h[a], h[a] <span style="color:#000;font-weight:bold">=</span> idx<span style="color:#000;font-weight:bold">++</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> dfn[N], low[N], tim;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> ans, root;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">tarjan</span>(<span style="color:#458;font-weight:bold">int</span> u) {
+</span></span><span style="display:flex;"><span>    dfn[u] <span style="color:#000;font-weight:bold">=</span> low[u] <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">++</span>tim;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> cnt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> h[u]; i <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">=</span> ne[i]) {
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> v <span style="color:#000;font-weight:bold">=</span> e[i];
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[v]) {
+</span></span><span style="display:flex;"><span>            tarjan(v);
+</span></span><span style="display:flex;"><span>            low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], low[v]);
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (low[v] <span style="color:#000;font-weight:bold">&gt;=</span> dfn[u]) cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], dfn[v]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (u <span style="color:#000;font-weight:bold">!=</span> root) cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>    ans <span style="color:#000;font-weight:bold">=</span> max(ans, cnt);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> (<span style="color:#000;font-weight:bold">~</span>scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>n, <span style="color:#000;font-weight:bold">&amp;</span>m) <span style="color:#000;font-weight:bold">&amp;&amp;</span> (n <span style="color:#000;font-weight:bold">||</span> m)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; i <span style="color:#000;font-weight:bold">&lt;</span> n; <span style="color:#000;font-weight:bold">++</span>i) dfn[i] <span style="color:#000;font-weight:bold">=</span> low[i] <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>, h[i] <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>        idx <span style="color:#000;font-weight:bold">=</span> tim <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>, a, b; i <span style="color:#000;font-weight:bold">&lt;=</span> m; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>            scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>a, <span style="color:#000;font-weight:bold">&amp;</span>b);
+</span></span><span style="display:flex;"><span>            add(a, b);
+</span></span><span style="display:flex;"><span>            add(b, a);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> cnt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (root <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; root <span style="color:#000;font-weight:bold">&lt;</span> n; <span style="color:#000;font-weight:bold">++</span>root) 
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[root]) {
+</span></span><span style="display:flex;"><span>                cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>                tarjan(root);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, ans <span style="color:#000;font-weight:bold">+</span> cnt <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="考虑无向图的点双连通分量缩点">考虑无向图的点双连通分量缩点</h3>
+<p>首先，不同于边的双连通分量和有向图的强连通分量的缩点，点的双连通分量缩点过程是，对于每个点的双连通分量，如果其内部存在割点，则向其内部每个割点连一条边。</p>
+<p>之前说过，每个割点至少属于两个点的双连通分量。</p>
+<p>简单证明下：如果一个割点属于 0 个点的双连通分量，这显然是不可能的。如果一个割点属于 1 个点的双连通分量，则将该割点去除后，原图依旧是连通的，只是去掉了这个割点而已。所以，每个割点至少属于两个点的双连通分量，这样在将割点去除后，原图就不连通了。</p>
+<p>如此，我们上述缩点的方式，就满足了每个割点都与其所在的所有的点的双连通分量连了一条边，最坏情况下缩点后的图中的点数是原图的 2 倍。</p>
+<p><strong>注意，这里是无向图缩点后的核心！！！</strong></p>
+<p>每个无向连通图进行缩点后，一定是一棵树！！！（这里我们不考虑不存在割点的无向连通图。）</p>
+<p>其中，原图中的割点在缩点后的图中对应的点，度数至少为 2。
+因为新图一定是一棵树，我们可以以任意一个<code>割点在缩点后的图中对应的点</code>作为新图的根，以此来解决其他问题。</p>
+<h3 id="考虑无向图的点双连通分量求解">考虑无向图的点双连通分量求解</h3>
+<p>对于当前点 <code>u</code> ，遍历其所有儿子，假设当前遍历的儿子为 <code>v</code> ，<code>v</code> 遍历结束后，如果说 <code>low[v] &gt;= dfn[u]</code> ，那么如果 <code>u</code> 不为根或者 <code>u</code> 为根但是至少有两个子树必须通过 <code>u</code> 才能互相到达，那么 <code>u</code> 为割点。对于这样的 <code>v</code> ，均将 <code>u</code> 作为其点的双连通分量中的一部分。同时，<code>u</code> 也可能作为其父节点所在点双中的一部分。<a href="#miao">之前的证明：关于如何求割点</a></p>
+<p>如下图所示：从 <code>1</code> 开始遍历，在遍历完 <code>2</code> 后，<code>2</code> 作为 {2, 3, 4} 这个点的双连通分量的一部分，但是也作为 {1, 2} 这个点的双连通分量的一部分。所以求解点的双连通分量的过程如下。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">if</span> (low[v] <span style="color:#000;font-weight:bold">&gt;=</span> dfn[u]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 有一个新的点双是包含 v，所以 vdcc_cnt += 1
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    vdcc_cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 上述所说的
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">if</span> (u <span style="color:#000;font-weight:bold">!=</span> root <span style="color:#000;font-weight:bold">||</span> vdcc_cnt <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">1</span>) u <span style="color:#a61717;background-color:#e3d2d2">是割点</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 类似scc的出栈，求出当前 vdcc 中的所有点
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#a61717;background-color:#e3d2d2">将栈中元素弹出，直至栈顶为</span> v <span style="color:#a61717;background-color:#e3d2d2">为止</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">/* 
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        u 也是当前这个 vdcc 中的一部分，但是对于下面这个图来说，1 不属于 {2, 3, 4} 这个 vdcc 
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        Q：我们仍然按照这个做法去做，是对的吗？
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">         
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        A：是对的，如果说 u 不属于 v 所在的 vdcc ，那么说明 low[v] &gt; dfn[u] ，
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        在 v 的 dfs 栈中，就会将其所有的子树的 vdcc 都求解完毕并弹出栈。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        等到 v 的 dfs 栈结束，回溯到 u 遍历 v 这个点时，这个 v 的子树构成的 vdcc 已经被弹出了，
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        所以 u 加入的 vdcc ，是其与 v 的。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">        只不过当 low[v] == dfn[u] 时，v 的子树可以到达 u ，那么他们一起构成一个 vdcc 。
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">    */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a61717;background-color:#e3d2d2">将</span> u <span style="color:#a61717;background-color:#e3d2d2">加入这个</span> vdcc <span style="color:#a61717;background-color:#e3d2d2">中</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="/images/17.png" style="zoom:33%;"/>
+<br>
+<p>来看道题：<a href="https://www.acwing.com/problem/content/398/">396. 矿场搭建</a></p>
+<p><strong>题解：</strong>
+对于这块的分析为：</p>
+<ul>
+<li>对于没有割点的连通块，如果是孤立点，则为需要 1 个逃生通道，否则需要 2 个。</li>
+<li>对于有割点的连通块，进行 vdcc 缩点，缩点后的图为一棵树。
+<ul>
+<li>以任意一个割点为根，则每个 vdcc 一定是叶子。</li>
+<li>如果叶子相连的割点坍塌，则叶子中的点无法逃生，所以每个叶子中需要有一个逃生通道，且该逃生通道不能是与其相连的割点（但是，我们需要知道的是，我们在 vdcc 的缩点，是将割点和其所在的 vdcc 连边了，故这个点一定不会是割点，因为已经是一个 vdcc 了）。</li>
+<li>如果割点非叶子非割点的 vdcc 中的一点坍塌，该 vdcc 中的其他点一定可以通过割点到达其他叶子，故无需单独逃生通道。</li>
+</ul>
+</li>
+</ul>
+<p><strong>代码：</strong></p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#include</span> <span style="color:#999;font-weight:bold;font-style:italic">&lt;bits/stdc++.h&gt;</span><span style="color:#999;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#000;font-weight:bold">using</span> <span style="color:#000;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">typedef</span> <span style="color:#458;font-weight:bold">unsigned</span> <span style="color:#458;font-weight:bold">long</span> <span style="color:#458;font-weight:bold">long</span> ull;
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1010</span>, M <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1010</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> n, m;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> h[N], e[M], ne[M], idx;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">add</span>(<span style="color:#458;font-weight:bold">int</span> a, <span style="color:#458;font-weight:bold">int</span> b) {
+</span></span><span style="display:flex;"><span>    e[idx] <span style="color:#000;font-weight:bold">=</span> b, ne[idx] <span style="color:#000;font-weight:bold">=</span> h[a], h[a] <span style="color:#000;font-weight:bold">=</span> idx<span style="color:#000;font-weight:bold">++</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> dfn[N], low[N], tim;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> stk[N], top;
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> dcc_cnt;
+</span></span><span style="display:flex;"><span>vector<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">&gt;</span> dcc[N];
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> cut[N];
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> root;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">tarjan</span>(<span style="color:#458;font-weight:bold">int</span> u) {
+</span></span><span style="display:flex;"><span>    dfn[u] <span style="color:#000;font-weight:bold">=</span> low[u] <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">++</span>tim;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 孤立点
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">if</span> (u <span style="color:#000;font-weight:bold">==</span> root <span style="color:#000;font-weight:bold">&amp;&amp;</span> h[u] <span style="color:#000;font-weight:bold">==</span> <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>) {
+</span></span><span style="display:flex;"><span>        dcc_cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>        dcc[dcc_cnt].emplace_back(u);
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> ;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// 去除孤立点后再添加进去，否则孤立点会被加入到其他连通块的vdcc中
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    stk[<span style="color:#000;font-weight:bold">++</span>top] <span style="color:#000;font-weight:bold">=</span> u;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> cnt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> h[u]; i <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">=</span> ne[i]) {
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> v <span style="color:#000;font-weight:bold">=</span> e[i];
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[v]) {
+</span></span><span style="display:flex;"><span>            tarjan(v);
+</span></span><span style="display:flex;"><span>            low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], low[v]);
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (low[v] <span style="color:#000;font-weight:bold">&gt;=</span> dfn[u]) {
+</span></span><span style="display:flex;"><span>                cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">if</span> (u <span style="color:#000;font-weight:bold">!=</span> root <span style="color:#000;font-weight:bold">||</span> cnt <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">1</span>) cut[u] <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#998;font-style:italic">// 弹出栈，直到弹到 v ，但是 v 和 u 可能作为一个 vdcc，所以还需要把 v 加回来
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>                dcc_cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#458;font-weight:bold">int</span> y;
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">do</span> {
+</span></span><span style="display:flex;"><span>                    y <span style="color:#000;font-weight:bold">=</span> stk[top<span style="color:#000;font-weight:bold">--</span>];
+</span></span><span style="display:flex;"><span>                    dcc[dcc_cnt].emplace_back(y);
+</span></span><span style="display:flex;"><span>                } <span style="color:#000;font-weight:bold">while</span> (y <span style="color:#000;font-weight:bold">!=</span> v);
+</span></span><span style="display:flex;"><span>                dcc[dcc_cnt].emplace_back(u);
+</span></span><span style="display:flex;"><span>            } 
+</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>            low[u] <span style="color:#000;font-weight:bold">=</span> min(low[u], dfn[v]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">int</span> T <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">while</span> (<span style="color:#000;font-weight:bold">~</span>scanf(<span style="color:#d14">&#34;%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>m) <span style="color:#000;font-weight:bold">&amp;&amp;</span> m <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> dcc_cnt; <span style="color:#000;font-weight:bold">++</span>i) dcc[i].clear();
+</span></span><span style="display:flex;"><span>        memset(dfn, <span style="color:#099">0</span>, <span style="color:#000;font-weight:bold">sizeof</span> dfn);
+</span></span><span style="display:flex;"><span>        memset(h, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>, <span style="color:#000;font-weight:bold">sizeof</span> h);
+</span></span><span style="display:flex;"><span>        memset(cut, <span style="color:#0086b3">false</span>, <span style="color:#000;font-weight:bold">sizeof</span> cut);
+</span></span><span style="display:flex;"><span>        idx <span style="color:#000;font-weight:bold">=</span> tim <span style="color:#000;font-weight:bold">=</span> n <span style="color:#000;font-weight:bold">=</span> top <span style="color:#000;font-weight:bold">=</span> dcc_cnt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> m; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>            <span style="color:#458;font-weight:bold">int</span> a, b;
+</span></span><span style="display:flex;"><span>            scanf(<span style="color:#d14">&#34;%d%d&#34;</span>, <span style="color:#000;font-weight:bold">&amp;</span>a, <span style="color:#000;font-weight:bold">&amp;</span>b);
+</span></span><span style="display:flex;"><span>            add(a, b);
+</span></span><span style="display:flex;"><span>            add(b, a);
+</span></span><span style="display:flex;"><span>            n <span style="color:#000;font-weight:bold">=</span> max({n, a, b});
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (root <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; root <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>root) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfn[root]) tarjan(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#458;font-weight:bold">int</span> res <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>        ull num <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> dcc_cnt; <span style="color:#000;font-weight:bold">++</span>i) {
+</span></span><span style="display:flex;"><span>            <span style="color:#458;font-weight:bold">int</span> cnt <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">j</span>: dcc[i])
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">if</span> (cut[j]) cnt <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (cnt <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">if</span> (dcc[i].size() <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">1</span>) res <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">2</span>, num <span style="color:#000;font-weight:bold">*=</span> (dcc[i].size() <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">*</span> dcc[i].size() <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">else</span> res <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>            } <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">if</span> (cnt <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">1</span>) {
+</span></span><span style="display:flex;"><span>                res <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>, num <span style="color:#000;font-weight:bold">*=</span> dcc[i].size() <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#d14">&#34;Case %d: %d %llu</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, T<span style="color:#000;font-weight:bold">++</span>, res, num);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<p><a href="https://blog.csdn.net/a_forever_dream/article/details/103019013/">点双连通分量&amp;边双连通分量详解</a></p>
+
+        </div>
+
+        
+
+
+        
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F' target="_blank">边的双连通分量</a></li>
+                
+                <li><a href='/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F' target="_blank">点的双连通分量</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="https://zzzyc.github.io/">solego&#39;s blog By solego</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zzzyc.github.io/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zzzyc.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="无向图的双连通分量" target="_blank">无向图的双连通分量</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/tool/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/" title="数据对拍器" target="_blank">数据对拍器</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/UTF-8%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D/" title="UTF-8编码介绍" target="_blank">UTF-8编码介绍</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84JSON%E5%BA%93%E6%95%99%E7%A8%8B%E9%9A%8F%E8%AE%B0/" title="从零开始的JSON库教程随记" target="_blank">从零开始的JSON库教程随记</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="有向图的强连通分量" target="_blank">有向图的强连通分量</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/" title="二分图的相关性质" target="_blank">二分图的相关性质</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84%E7%9A%84DFS%E5%AD%98%E5%82%A8%E9%A1%BA%E5%BA%8F/" title="欧拉路径的DFS存储顺序" target="_blank">欧拉路径的DFS存储顺序</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84%E7%9A%84%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" title="树状数组的使用总结" target="_blank">树状数组的使用总结</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/" title="谈谈最近" target="_blank">谈谈最近</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/" title="新的博客，新的生活" target="_blank">新的博客，新的生活</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://zzzyc.github.io/categories/CS/">CS (2)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/">工具 (1)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/">笔试 (3)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (5)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">闲谈 (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
+    
+    <a href="https://zzzyc.github.io/tags/JSON/">JSON</a>
+    
+    <a href="https://zzzyc.github.io/tags/LeetCode/">LeetCode</a>
+    
+    <a href="https://zzzyc.github.io/tags/UTF-8/">UTF-8</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BA%8C%E5%88%86%E5%9B%BE/">二分图</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">单元测试</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/">字符编码</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AF%B9%E6%8B%8D/">对拍</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">强连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">拓扑排序</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E5%9B%A2/">最大团</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/">最大独立集</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E8%BE%B9%E5%8C%B9%E9%85%8D/">最大边匹配</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E7%82%B9%E8%A6%86%E7%9B%96/">最小点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E9%87%8D%E5%A4%8D%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小重复路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E8%BF%91/">最近</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
+    
+</div>
+    </section>
+
+    
+
+    
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

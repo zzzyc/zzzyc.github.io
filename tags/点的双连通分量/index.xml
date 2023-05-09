@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>点的双连通分量 on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/</link>
+    <description>Recent content in 点的双连通分量 on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Sun, 07 May 2023 00:32:56 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>无向图的双连通分量</title>
+      <link>https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/</link>
+      <pubDate>Sun, 07 May 2023 00:32:56 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/</guid>
+      <description>无向图的双连通分量</description>
+    </item>
+    
+  </channel>
+</rss>
