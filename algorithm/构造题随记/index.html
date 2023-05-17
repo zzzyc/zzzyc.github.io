@@ -9,21 +9,24 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>闲谈 | solego&#39;s blog</title>
-    <meta property="og:title" content="闲谈 - solego&#39;s blog">
+    <title>构造题随记 | solego&#39;s blog</title>
+    <meta property="og:title" content="构造题随记 - solego&#39;s blog">
     <meta property="og:type" content="article">
         
+    <meta property="article:published_time" content='2023-05-17T11:46:04&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-05-17T11:46:04&#43;08:00'>
         
     <meta name="Keywords" content="">
-    <meta name="description" content="闲谈">
+    <meta name="description" content="构造题随记">
         
     <meta name="author" content="solego">
-    <meta property="og:url" content="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">
+    <meta property="og:url" content="https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
     <link rel="stylesheet" href='/css/style.css'>
-    <link rel="alternate" type="application/rss+xml" href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/index.xml" title="solego's blog" />
     <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     
@@ -87,75 +90,94 @@
                     
 <div class="res-cons">
     
-    <h3 class="archive-title">
-        
-        <span> 分类 </span>
-
-        <span class="keyword">闲谈</span>
-        中的文章
-    </h3>
-    
-
-    
     <article class="post">
         <header>
-            <h1 class="post-title">
-                <a href="https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/" target="_blank">谈谈最近</a>
-            </h1>
+            <h1 class="post-title">构造题随记</h1>
         </header>
         
-  <time datetime="2023-04-21T17:31:37Z" class="post-meta meta-date dt-published">
-    2023年4月22日
+  <time datetime="2023-05-17T03:46:04Z" class="post-meta meta-date dt-published">
+    2023年5月17日
   </time>
 
 
-<div class="post-meta meta-category">
-  <span>&nbsp;|</span>
-  
-    <a href='/categories/%E9%97%B2%E8%B0%88' target="_blank">闲谈</a>
-  
-</div>
 
-
-        <div class="post-content">
-            <p>那就从今天开始吧，哦对了，我习惯把睡觉前后作为一天的分界线。</p>
-<p>我一直对生活没有很大的热情，但却有一定的执念。</p>……
-            <p class="readmore"><a href="https://zzzyc.github.io/post/%E8%B0%88%E8%B0%88%E6%9C%80%E8%BF%91/" target="_blank">阅读全文</a></p>
-        </div>
-    </article>
-    
-    <article class="post">
-        <header>
-            <h1 class="post-title">
-                <a href="https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/" target="_blank">新的博客，新的生活</a>
-            </h1>
-        </header>
         
-  <time datetime="2023-04-21T08:09:20Z" class="post-meta meta-date dt-published">
-    2023年4月21日
-  </time>
-
-
-<div class="post-meta meta-category">
-  <span>&nbsp;|</span>
-  
-    <a href='/categories/%E9%97%B2%E8%B0%88' target="_blank">闲谈</a>
-  
-</div>
-
-
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
         <div class="post-content">
-            起因在于之前搭的 hexo 虽然简洁，但是太久没维护了。 在朋友的推荐下尝试了 hugo ，简单易上手，Maupassant 主题简洁优雅。 那就从这重新起航吧。……
-            <p class="readmore"><a href="https://zzzyc.github.io/post/%E6%96%B0%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%B0%E7%9A%84%E7%94%9F%E6%B4%BB/" target="_blank">阅读全文</a></p>
+            <h2 id="codeforces-1823d-rating-1900">Codeforces 1823D (Rating 1900)</h2>
+<p><strong>题意：</strong></p>
+<p>构造一个长度为 $n$ 的字符串 $s$ ，均为小写字母。</p>
+<p>给出 $k$ 个要求，第 i 个要求为 ${x_i, c_i}$，表示对于 $s[1, x_i]$ 这个前缀字符串，有恰好 $c_i$ 个本质不同的回文子串。</p>
+<p>数据范围：</p>
+<ul>
+<li>
+<p>$1\leq n\leq 2\times 10^5, 1\leq k\leq 20$</p>
+</li>
+<li>
+<p>$3\leq x_1&lt;x_2&lt;\cdots&lt;x_k=n$</p>
+</li>
+<li>
+<p>$3\leq c_1\leq c_2\leq \dots\leq c_k\leq \min{10^9,\frac{(n+1)\times n}{2}}$</p>
+</li>
+</ul>
+<p><strong>题解：</strong></p>
+<p>首先，$k\leq 20$，而小写字母只有 26 个。</p>
+<p>考虑每个前缀的回文子串的 min 和 max</p>
+<ul>
+<li>n = 1,  palindrome count: min = max = 1 (a)</li>
+<li>n = 2,  palindrome count: min = max = 2 (aa, ab)</li>
+<li>n = 3,  palindrome count: min = max = 3 (aaa, aab, abb, abc, aba)</li>
+<li>$n \geq 4$,  palindrome count: min = 4, max = n</li>
+</ul>
+<p>如何构造：</p>
+<ul>
+<li>pa[i] 表示前缀中本质不同的回文子串数</li>
+<li>s[1~3] = &ldquo;abc&rdquo;</li>
+<li>如果 pa[i + 1] == pa[i]，则 s[i + 1] = &lsquo;a/b/c&rsquo;</li>
+<li>如果 pa[i] =&gt; pa[i + 1] =&gt; &hellip; =&gt; pa[j]，pa[k] - pa[k - 1] == 1, k in (i, j]，对于连续的段需要一个字符，故至多 k 个不同字符即可。</li>
+</ul>
+<p><strong>证明：$pa[i + 1] - pa[i] \leq 1$</strong></p>
+<p>如果 $pa[i + 1] - pa[i] &gt; 1$，则说明：</p>
+<ul>
+<li>至少存在两个以 s[i + 1] 结尾的子串是回文串</li>
+<li>s[i + 1] 在 s[1~i] 中出现过（如果未出现过，那么 pa[i + 1] = pa[i] + 1）</li>
+</ul>
+<p>假设 j &lt; k，且 s[j ~ i + 1] 和 s[k ~ i + 1] 都是回文串，因为 s[i + 1] 出现过，所以串长一定大于 1。</p>
+<p>考虑 pos 为所有 s[i + 1] 这个字符在 s[1~i] 的位置，共有 npos 个。</p>
+<p>故考虑的为：s[pos[1] ~ i + 1]，s[pos[2] ~ i + 1], &hellip;, s[pos[npos] ~ i + 1] 是否为回文串且之前未出现过</p>
+<p>这里有一个显然的想法是：如果 s[pos[x] ~ i + 1] 是回文串，则 s[pos[x] ~ pos[x + 1]] 和 s[pos[npos] ~ i + 1] 是一样的，要么都是回文串，要么都不是回文串，所以如果都是回文串的话，则这个回文串必然是在之前出现过，所以不会被计算在内，那么说明对于任意的以 s[i + 1] 结尾的回文串，至多只有一个是新的回文串。</p>
+<p>则 $pa[i + 1] - pa[i] \leq 1$ 得证。</p>
+<p>故上述的对于 $n \geq 4$,  palindrome count: min = 4, max = n，也就可以构造得出了。</p>
+<p><strong>代码：</strong></p>
+<p><a href="https://codeforces.com/contest/1823/submission/206168210">参考代码</a></p>
+
+        </div>
+
+        
+
+
+        
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
         </div>
     </article>
     
-
     
 
-
-
-
+    
+    
+    
+    
 
 </div>
 
@@ -179,6 +201,17 @@
 </footer>
 
 
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 <a id="rocket" href="#top"></a>
 <script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
