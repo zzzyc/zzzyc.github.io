@@ -110,52 +110,11 @@
         
         
         <div class="post-content">
-            <h2 id="codeforces-1823d-rating-1900">Codeforces 1823D (Rating 1900)</h2>
-<p><strong>题意：</strong></p>
-<p>构造一个长度为 $n$ 的字符串 $s$ ，均为小写字母。</p>
-<p>给出 $k$ 个要求，第 i 个要求为 ${x_i, c_i}$，表示对于 $s[1, x_i]$ 这个前缀字符串，有恰好 $c_i$ 个本质不同的回文子串。</p>
-<p>数据范围：</p>
-<ul>
-<li>
-<p>$1\leq n\leq 2\times 10^5, 1\leq k\leq 20$</p>
-</li>
-<li>
-<p>$3\leq x_1&lt;x_2&lt;\cdots&lt;x_k=n$</p>
-</li>
-<li>
-<p>$3\leq c_1\leq c_2\leq \dots\leq c_k\leq \min{10^9,\frac{(n+1)\times n}{2}}$</p>
-</li>
-</ul>
-<p><strong>题解：</strong></p>
-<p>首先，$k\leq 20$，而小写字母只有 26 个。</p>
-<p>考虑每个前缀的回文子串的 min 和 max</p>
-<ul>
-<li>n = 1,  palindrome count: min = max = 1 (a)</li>
-<li>n = 2,  palindrome count: min = max = 2 (aa, ab)</li>
-<li>n = 3,  palindrome count: min = max = 3 (aaa, aab, abb, abc, aba)</li>
-<li>$n \geq 4$,  palindrome count: min = 4, max = n</li>
-</ul>
-<p>如何构造：</p>
-<ul>
-<li>pa[i] 表示前缀中本质不同的回文子串数</li>
-<li>s[1~3] = &ldquo;abc&rdquo;</li>
-<li>如果 pa[i + 1] == pa[i]，则 s[i + 1] = &lsquo;a/b/c&rsquo;</li>
-<li>如果 pa[i] =&gt; pa[i + 1] =&gt; &hellip; =&gt; pa[j]，pa[k] - pa[k - 1] == 1, k in (i, j]，对于连续的段需要一个字符，故至多 k 个不同字符即可。</li>
-</ul>
-<p><strong>证明：$pa[i + 1] - pa[i] \leq 1$</strong></p>
-<p>如果 $pa[i + 1] - pa[i] &gt; 1$，则说明：</p>
-<ul>
-<li>至少存在两个以 s[i + 1] 结尾的子串是回文串</li>
-<li>s[i + 1] 在 s[1~i] 中出现过（如果未出现过，那么 pa[i + 1] = pa[i] + 1）</li>
-</ul>
-<p>假设 j &lt; k，且 s[j ~ i + 1] 和 s[k ~ i + 1] 都是回文串，因为 s[i + 1] 出现过，所以串长一定大于 1。</p>
-<p>考虑 pos 为所有 s[i + 1] 这个字符在 s[1~i] 的位置，共有 npos 个。</p>
-<p>故考虑的为：s[pos[1] ~ i + 1]，s[pos[2] ~ i + 1], &hellip;, s[pos[npos] ~ i + 1] 是否为回文串且之前未出现过</p>
-<p>这里有一个显然的想法是：如果 s[pos[x] ~ i + 1] 是回文串，则 s[pos[x] ~ pos[x + 1]] 和 s[pos[npos] ~ i + 1] 是一样的，要么都是回文串，要么都不是回文串，所以如果都是回文串的话，则这个回文串必然是在之前出现过，所以不会被计算在内，那么说明对于任意的以 s[i + 1] 结尾的回文串，至多只有一个是新的回文串。</p>
-<p>则 $pa[i + 1] - pa[i] \leq 1$ 得证。</p>
-<p>故上述的对于 $n \geq 4$,  palindrome count: min = 4, max = n，也就可以构造得出了。</p>
-<p><strong>代码：</strong></p>
-<p><a href="https://codeforces.com/contest/1823/submission/206168210">参考代码</a></p>
+            <p><a href="https://blog.csdn.net/weixin_43900869/article/details/130811276">√</a> 2023-05-21: <a href="https://codeforces.com/problemset/problem/1809/D">Codeforces 1809D</a> Binary String Sorting</p>
+<p>√ 2023-05-20: <a href="https://codeforces.com/problemset/problem/1815/B">Codeforces 1815B</a> Sum Graph</p>
+<p>√ 2023-05-19: <a href="https://codeforces.com/problemset/problem/1815/C">Codeforces 1815C</a> Between</p>
+<p>√ 2023-05-18: <a href="https://codeforces.com/problemset/problem/1817/B">Codeforces 1817B</a> Fish Graph</p>
+<p>√ 2023-05-17: <a href="https://codeforces.com/problemset/problem/1823/D">Codeforces 1823D</a> Unique Palindromes</p>
 
         </div>
 
