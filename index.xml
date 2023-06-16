@@ -6,7 +6,16 @@
     <description>Recent content on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Thu, 08 Jun 2023 01:25:02 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Jun 2023 21:15:35 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>更新线</title>
+      <link>https://zzzyc.github.io/post/%E6%9B%B4%E6%96%B0%E7%BA%BF/</link>
+      <pubDate>Fri, 16 Jun 2023 15:43:50 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/post/%E6%9B%B4%E6%96%B0%E7%BA%BF/</guid>
+      <description>更新线</description>
+    </item>
+    
     <item>
       <title>构造题随记</title>
       <link>https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/</link>
@@ -14,6 +23,15 @@
       
       <guid>https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/</guid>
       <description>构造题随记</description>
+    </item>
+    
+    <item>
+      <title>子集枚举</title>
+      <link>https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/</link>
+      <pubDate>Fri, 16 Jun 2023 21:15:35 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/</guid>
+      <description>子集枚举</description>
     </item>
     
     <item>
