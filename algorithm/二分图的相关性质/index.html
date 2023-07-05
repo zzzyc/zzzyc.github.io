@@ -155,13 +155,13 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#二分图的定义">二分图的定义</a></li>
-    <li><a href="#二分图的判定">二分图的判定</a></li>
-    <li><a href="#二分图的最大边匹配">二分图的最大边匹配</a></li>
-    <li><a href="#二分图的最小点覆盖">二分图的最小点覆盖</a></li>
-    <li><a href="#二分图的最大独立集与最大团">二分图的最大独立集与最大团</a></li>
-    <li><a href="#二分图的最小路径点覆盖和最小路径重复点覆盖">二分图的最小路径点覆盖和最小路径重复点覆盖</a></li>
-    <li><a href="#总结">总结</a></li>
+    <li><a href="#heading">二分图的定义</a></li>
+    <li><a href="#heading1">二分图的判定</a></li>
+    <li><a href="#heading2">二分图的最大边匹配</a></li>
+    <li><a href="#heading3">二分图的最小点覆盖</a></li>
+    <li><a href="#heading4">二分图的最大独立集与最大团</a></li>
+    <li><a href="#heading5">二分图的最小路径点覆盖和最小路径重复点覆盖</a></li>
+    <li><a href="#heading6">总结</a></li>
   </ul>
 </nav>
     </div>
@@ -230,128 +230,128 @@
         </div>
         
         <div class="post-content">
-            <h2 id="二分图的定义">二分图的定义</h2>
+            <h2 id="heading">二分图的定义</h2>
 <p>二分图是指将图中所有点分为两个集合，任意一条边对应的两个点都不在同一个集合中。</p>
-<h2 id="二分图的判定">二分图的判定</h2>
+<h2 id="heading1">二分图的判定</h2>
 <p>判定一个图是否为二分图，是考虑这个图中是否有奇数环，如果不存在奇数环，则图为二分图。
 具体的判定方法可以使用染色法。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>vector<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">&gt;</span> g[N]; <span style="color:#998;font-style:italic">// vector 存储图
-</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">100010</span>;
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> color[N]; <span style="color:#998;font-style:italic">// 标记每个点的颜色，为 0 表示还未被染色
-</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> <span style="color:#900;font-weight:bold">dfs</span>(<span style="color:#458;font-weight:bold">int</span> u, <span style="color:#458;font-weight:bold">int</span> c) {
-</span></span><span style="display:flex;"><span>    color[u] <span style="color:#000;font-weight:bold">=</span> c;
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">v</span>: g[u])
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (color[v] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfs(v, <span style="color:#099">3</span> <span style="color:#000;font-weight:bold">-</span> u)) <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
-</span></span><span style="display:flex;"><span>        } <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">if</span> (color[v] <span style="color:#000;font-weight:bold">!=</span> color[u]) {
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">true</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 一边标记为颜色 1，一边标记为颜色 2
-</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i) 
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (color[i] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfs(i, <span style="color:#099">1</span>)) {
-</span></span><span style="display:flex;"><span>            ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">false</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">break</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">if</span> (ans) puts(<span style="color:#d14">&#34;This graph is biparite graph.&#34;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">else</span> <span style="color:#900;font-weight:bold">puts</span>(<span style="color:#d14">&#34;This graph is not biparite graph.&#34;</span>);
-</span></span></code></pre></td></tr></table>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">vector<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">&gt;</span> g[N]; <span style="color:#998;font-style:italic">// vector 存储图
+</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> N <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">100010</span>;
+<span style="color:#458;font-weight:bold">int</span> color[N]; <span style="color:#998;font-style:italic">// 标记每个点的颜色，为 0 表示还未被染色
+</span><span style="color:#998;font-style:italic"></span>
+<span style="color:#458;font-weight:bold">bool</span> <span style="color:#900;font-weight:bold">dfs</span>(<span style="color:#458;font-weight:bold">int</span> u, <span style="color:#458;font-weight:bold">int</span> c) {
+    color[u] <span style="color:#000;font-weight:bold">=</span> c;
+    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">v</span>: g[u])
+        <span style="color:#000;font-weight:bold">if</span> (color[v] <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>) {
+            <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfs(v, <span style="color:#099">3</span> <span style="color:#000;font-weight:bold">-</span> u)) <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
+        } <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">if</span> (color[v] <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> color[u]) {
+            <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
+        }
+    <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">true</span>;
+}
+
+<span style="color:#998;font-style:italic">// 一边标记为颜色 1，一边标记为颜色 2
+</span><span style="color:#998;font-style:italic"></span>
+<span style="color:#458;font-weight:bold">bool</span> ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
+<span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">=</span> n; <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">+</span>i) 
+    <span style="color:#000;font-weight:bold">if</span> (color[i] <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>) {
+        <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>dfs(i, <span style="color:#099">1</span>)) {
+            ans <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">false</span>;
+            <span style="color:#000;font-weight:bold">break</span>;
+        }
+    }
+
+<span style="color:#000;font-weight:bold">if</span> (ans) puts(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">This graph is biparite graph.</span><span style="color:#d14">&#34;</span>);
+<span style="color:#000;font-weight:bold">else</span> <span style="color:#900;font-weight:bold">puts</span>(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">This graph is not biparite graph.</span><span style="color:#d14">&#34;</span>);
+</code></pre></td></tr></table>
 </div>
 </div><p><a href="https://www.acwing.com/problem/content/862/">二分图判定模板题：860. 染色法判定二分图</a></p>
 <p><a href="https://www.acwing.com/problem/content/259/">二分图判定的练习题：257. 关押罪犯</a></p>
-<h2 id="二分图的最大边匹配">二分图的最大边匹配</h2>
+<h2 id="heading2">二分图的最大边匹配</h2>
 <p>对于一个二分图，分为集合 $S$ 和 集合 $T$。</p>
 <p>选择最多的边，使得这些边对应的点各不相同。</p>
 <p>那么解决这个问题的就是匈牙利算法，这也是接下来解决问题的重点算法。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> match[N];
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> st[N];
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> g[N][N];
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">bool</span> <span style="color:#900;font-weight:bold">hungarian</span>(<span style="color:#458;font-weight:bold">int</span> i) {
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> j <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; j <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>j) {
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (g[i][j] <span style="color:#000;font-weight:bold">&amp;&amp;</span> <span style="color:#000;font-weight:bold">!</span>st[j]) {
-</span></span><span style="display:flex;"><span>            st[j] <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">if</span> (match[j] <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">||</span> hungarian(match[j])) {
-</span></span><span style="display:flex;"><span>                match[j] <span style="color:#000;font-weight:bold">=</span> i;
-</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">true</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> res <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
-</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;=</span> n; <span style="color:#000;font-weight:bold">++</span>i)
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> (hungarian(i)) res <span style="color:#000;font-weight:bold">+=</span> <span style="color:#099">1</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>printf(<span style="color:#d14">&#34;二分图的最大边匹配为：%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, res);
-</span></span></code></pre></td></tr></table>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#458;font-weight:bold">int</span> match[N];
+<span style="color:#458;font-weight:bold">int</span> st[N];
+<span style="color:#458;font-weight:bold">int</span> g[N][N];
+
+<span style="color:#458;font-weight:bold">bool</span> <span style="color:#900;font-weight:bold">hungarian</span>(<span style="color:#458;font-weight:bold">int</span> i) {
+    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> j <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; j <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">=</span> n; <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">+</span>j) {
+        <span style="color:#000;font-weight:bold">if</span> (g[i][j] <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span> <span style="color:#000;font-weight:bold">!</span>st[j]) {
+            st[j] <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
+            <span style="color:#000;font-weight:bold">if</span> (match[j] <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">|</span><span style="color:#000;font-weight:bold">|</span> hungarian(match[j])) {
+                match[j] <span style="color:#000;font-weight:bold">=</span> i;
+                <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">true</span>;
+            }
+        }
+    }
+    <span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">false</span>;
+}
+
+<span style="color:#458;font-weight:bold">int</span> res <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+<span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>; i <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">=</span> n; <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">+</span>i)
+    <span style="color:#000;font-weight:bold">if</span> (hungarian(i)) res <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span>;
+
+printf(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">二分图的最大边匹配为：%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, res);
+</code></pre></td></tr></table>
 </div>
 </div><p>解释一下上面的几个数组：</p>
 <ul>
@@ -377,47 +377,47 @@
 </li>
 </ul>
 <p><a href="https://www.acwing.com/problem/content/374/">二分图最大边匹配的识别：372. 棋盘覆盖</a></p>
-<h2 id="二分图的最小点覆盖">二分图的最小点覆盖</h2>
+<h2 id="heading3">二分图的最小点覆盖</h2>
 <p>对于一个二分图，分为集合 $S$ 和 集合 $T$。</p>
 <p>选择最少的点，使得其可以覆盖所有的边。（覆盖一条边是指，一条边对应两个点，其中至少有一个点被选择）</p>
 <p>一个结论：二分图的最大边匹配 = 二分图的最小点覆盖数，懒得证明了。</p>
 <p><a href="https://www.acwing.com/problem/content/378/">二分图最小点覆盖的识别：376. 机器任务</a></p>
-<h2 id="二分图的最大独立集与最大团">二分图的最大独立集与最大团</h2>
+<h2 id="heading4">二分图的最大独立集与最大团</h2>
 <p>对于一个图，分为集合 $S$ 和 集合 $T$，选择最多的点，但是这些点中任意两个点都不存在一条边，这个点集就是最大独立集。</p>
 <p>对于一个图，分为集合 $S$ 和 集合 $T$，选择最多的点，使得任意两点之间都存在边，这些点和他们之间的边构成了一个完全图，这个完全图叫作团，选择最多的点满足这个条件，这些点和他们之间的边构成了一个最大团。</p>
 <p>在二分图中有一些结论：二分图的最大独立集 = 点数 - 二分图的最小点覆盖。</p>
 <p>简单证明下：二分图的最大独立集是指选择最多的点，两两点之间内部不存在边。等价于 “去掉最少的点，将所有边都破坏掉”，即选择最少的点，覆盖所有的边，对应的就是二分图的最小点覆盖。</p>
 <p><a href="https://www.acwing.com/problem/content/description/380/">二分图的最大独立集识别：378. 骑士放置</a></p>
-<h2 id="二分图的最小路径点覆盖和最小路径重复点覆盖">二分图的最小路径点覆盖和最小路径重复点覆盖</h2>
+<h2 id="heading5">二分图的最小路径点覆盖和最小路径重复点覆盖</h2>
 <p>对于一个有向无环图（DAG） ，二分图的最小路径点覆盖是指找到最少的路径，选择的路径之间不存在交点，使得覆盖所有点。</p>
 <p>一个结论：二分图的最小路径点覆盖 = 点数 - 二分图的最大边匹配</p>
 <p>简单证明：</p>
 <p>假设现在有 5 个点，我们建立如下的图，如果从 1 点有一条向 2 点的边，那么我们在下面这个图中从 1 点向 2&rsquo; 点连一条边。
 对于一个路径来说，其只有一个终点，这个终点没有出边，即对于所有的出点来说，找到所有没有向入点连边的出点，这就是路径数。
 故我们需要找到最少的出点，等价于我们需要找到尽可能多的出点都有匹配边，即找到最大边匹配，减去这些有匹配边的出点，剩余的没有匹配边的出点就是路径的终点。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>1       1&#39;
-</span></span><span style="display:flex;"><span>2       2&#39;
-</span></span><span style="display:flex;"><span>3       3&#39;
-</span></span><span style="display:flex;"><span>4       4&#39;
-</span></span><span style="display:flex;"><span>5       5&#39;
-</span></span><span style="display:flex;"><span>出点    入点
-</span></span></code></pre></td></tr></table>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">1       1&#39;
+2       2&#39;
+3       3&#39;
+4       4&#39;
+5       5&#39;
+出点    入点
+</code></pre></td></tr></table>
 </div>
 </div><p>二分图的最小路径重复点覆盖，可以通过传递闭包，转换为二分图的最小路径点覆盖。
 我们现在有路径 <code>x-&gt;y-&gt;z</code>，但是 <code>x-&gt;y</code> 和 <code>y&gt;z</code> 都已经被走过，那么对于这条路径，剩余价值为 <code>x-&gt;z</code> 没走过，将这条边加入到图中。
 而传递闭包就是指：<code>x-&gt;y &amp; y-&gt;z ==&gt; x-&gt;z</code> 即 <code>x-&gt;y</code> 以及 <code>y-&gt;z</code> 可以推导出 <code>x-&gt;z</code></p>
 <p><a href="https://www.acwing.com/problem/content/381/">二分图的最小路径重复点覆盖、二分图的最小路径点覆盖识别</a></p>
-<h2 id="总结">总结</h2>
+<h2 id="heading6">总结</h2>
 <ol>
 <li>二分图等价于：图中不存在奇数环，等价于染色法不会有矛盾</li>
 <li>匈牙利算法求解二分图最大边匹配</li>
@@ -530,6 +530,10 @@
     </li>
     
     <li>
+        <a href="https://zzzyc.github.io/cs/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E8%BF%87%E7%A8%8B/" title="获取目的主机地址的过程" target="_blank">获取目的主机地址的过程</a>
+    </li>
+    
+    <li>
         <a href="https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/" title="子集枚举" target="_blank">子集枚举</a>
     </li>
     
@@ -557,20 +561,16 @@
         <a href="https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/" title="二分图的相关性质" target="_blank">二分图的相关性质</a>
     </li>
     
-    <li>
-        <a href="https://zzzyc.github.io/algorithm/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84%E7%9A%84DFS%E5%AD%98%E5%82%A8%E9%A1%BA%E5%BA%8F/" title="欧拉路径的DFS存储顺序" target="_blank">欧拉路径的DFS存储顺序</a>
-    </li>
-    
 </ul>
     </section>
 
     
 
     <section class="widget">
-        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+        <h3 class="widget-title"><a href='/categories/'>categories</a></h3>
 <ul class="widget-list">
     
-    <li><a href="https://zzzyc.github.io/categories/CS/">CS (1)</a></li>
+    <li><a href="https://zzzyc.github.io/categories/CS/">CS (2)</a></li>
     
     <li><a href="https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/">工具 (1)</a></li>
     
@@ -586,7 +586,7 @@
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+        <h3 class="widget-title"><a href='/tags/'>tags</a></h3>
 <div class="tagcloud">
     
     <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
@@ -626,6 +626,8 @@
     <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
     
     <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
     
     <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
     

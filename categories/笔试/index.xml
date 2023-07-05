@@ -6,7 +6,11 @@
     <description>Recent content in 笔试 on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Sat, 29 Apr 2023 13:39:28 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 29 Apr 2023 13:39:28 +0800</lastBuildDate>
+    
+	<atom:link href="https://zzzyc.github.io/categories/%E7%AC%94%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>20230415_美团实习笔试</title>
       <link>https://zzzyc.github.io/solution/20230415_%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AF%95/</link>

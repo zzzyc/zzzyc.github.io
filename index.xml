@@ -6,7 +6,11 @@
     <description>Recent content on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Fri, 16 Jun 2023 21:15:35 +0800</lastBuildDate><atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 05 Jul 2023 12:57:11 +0800</lastBuildDate>
+    
+	<atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>更新线</title>
       <link>https://zzzyc.github.io/post/%E6%9B%B4%E6%96%B0%E7%BA%BF/</link>
@@ -23,6 +27,15 @@
       
       <guid>https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/</guid>
       <description>构造题随记</description>
+    </item>
+    
+    <item>
+      <title>获取目的主机地址的过程</title>
+      <link>https://zzzyc.github.io/cs/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E8%BF%87%E7%A8%8B/</link>
+      <pubDate>Wed, 05 Jul 2023 12:57:11 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/cs/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E8%BF%87%E7%A8%8B/</guid>
+      <description>获取目的主机地址的过程</description>
     </item>
     
     <item>
@@ -203,7 +216,7 @@
       <pubDate>Fri, 21 Apr 2023 16:00:45 +0800</pubDate>
       
       <guid>https://zzzyc.github.io/about/</guid>
-      <description>这里是 solego&amp;rsquo;s blog 但同时，我也想留下几个人生的关键词： 专注：心无旁骛，万事可破，请你足够相信。 勤奋：付出不亚于任何人的努力，就连神明也会庇佑你。 在你短暂的学习生涯中，总是会仰望那些比你聪明的人，带来的也会有对聪明的人的害怕，聪明的人往往跑的都早 耐错：一些成功的人从来不会被困难所打倒。 你随</description>
+      <description>这里是 solego&#39;s blog 但同时，我也想留下几个人生的关键词： 专注：心无旁骛，万事可破，请你足够相信。 勤奋：付出不亚于任何人的努力，就连神明也会庇佑你。 在你短暂的学习生涯中，总是会仰望那些比你聪明的人，带来的也会有对聪明的人的害怕，聪明的人往往跑的都早 耐错：一些成功的人从来不会被困难所打倒。 你随</description>
     </item>
     
     <item>

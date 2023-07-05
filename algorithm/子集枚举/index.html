@@ -117,7 +117,7 @@
         
         
         <div class="post-content">
-            <h2 id="子集枚举">子集枚举</h2>
+            <h2 id="heading">子集枚举</h2>
 <p>给定一个由 $n$ 个不同的数构成的集合，求出这个集合所有的子集。</p>
 <p>容易知道的是，对于每个数来说，有选或不选两种情况，故一共有 $2^n$ 个子集。</p>
 <p>如此，这个 $n$ 一定不能太大，否则我们没办法枚举出所有的子集。</p>
@@ -129,54 +129,56 @@
 <p>令 $s = m$，</p>
 <p>$s-1$ 就是将 $[0,k-1]$ 这 $k$ 位设置为 $1$，$k$ 这位设置为 $0$，其余位仍为 $s$ 中对应的位。</p>
 <p>然后 <code>(s-1) &amp; m</code> 就是将 $s$ 中最低位 $k$ 删除，由于二进制的性质，再加上原本比 $k$ 更低的一些为 $1$ 的位即是最新的子集。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">print_subset</span>(<span style="color:#458;font-weight:bold">int</span> m) {
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; s <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&amp;</span> m) {
-</span></span><span style="display:flex;"><span>        printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, i);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">print_subset_include_zero</span>(<span style="color:#458;font-weight:bold">int</span> m) {
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; ; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&amp;</span> m) {
-</span></span><span style="display:flex;"><span>        printf(<span style="color:#d14">&#34;%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, i);
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> (s <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span>) <span style="color:#000;font-weight:bold">break</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">print_subset</span>(<span style="color:#458;font-weight:bold">int</span> m) {
+    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; s <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&amp;</span> m) {
+        printf(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, i);
+    }
+}
+
+<span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">print_subset_include_zero</span>(<span style="color:#458;font-weight:bold">int</span> m) {
+    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; ; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span>) <span style="color:#000;font-weight:bold">&amp;</span> m) {
+        printf(<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">%d</span><span style="color:#d14">\n</span><span style="color:#d14">&#34;</span>, i);
+        <span style="color:#000;font-weight:bold">if</span> (s <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>) <span style="color:#000;font-weight:bold">break</span>;
+    }
+}
+
+</code></pre></td></tr></table>
 </div>
-</div><h2 id="时间复杂度分析">时间复杂度分析</h2>
+</div><h2 id="heading1">时间复杂度分析</h2>
 <p>由于遍历只会枚举每个子集，二进制中 $1$ 的数量为 $count$ ，则时间复杂度为 $O(2^{count})$</p>
-<h2 id="拓展1">拓展1</h2>
+<h2 id="1">拓展1</h2>
 <p>对于一个至多有 $n$ 个数的集合 $set$，考虑这个集合的每个子集，会作为多少其他集合的子集？</p>
 <p>对应一个子集 $subset$，选择集合 $set$ 中不为子集的 $subset$ 的子集 $sb$，即 $sb \cup subset=set, sb\cap subset = \emptyset$。</p>
 <p>那么枚举 $sb$ 的所有子集，与 $subset$ 取并后的结果就是 包含 $subset$ 的所有 $set$ 的子集。</p>
 <p>时间复杂度仍为指数级</p>
-<h2 id="拓展2">拓展2</h2>
+<h2 id="2">拓展2</h2>
 <p>遍历所有掩码的子掩码</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> m <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; m <span style="color:#000;font-weight:bold">&lt;</span> (<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> n; <span style="color:#000;font-weight:bold">++</span>i))
-</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; s; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&amp;</span> m))
-</span></span></code></pre></td></tr></table>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> m <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; m <span style="color:#000;font-weight:bold">&lt;</span> (<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#000;font-weight:bold">&lt;</span> n; <span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">+</span>i))
+    <span style="color:#000;font-weight:bold">for</span> (<span style="color:#458;font-weight:bold">int</span> s <span style="color:#000;font-weight:bold">=</span> m; s; s <span style="color:#000;font-weight:bold">=</span> (s <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&amp;</span> m))
+</code></pre></td></tr></table>
 </div>
 </div><p>时间复杂度分析，对于每位有三种情况，</p>
 <ol>
@@ -186,12 +188,12 @@
 <p>故一共每位有三种情况，总共是 $O(3^n)$ 的复杂度。</p>
 <p>另一种分析方式为，对于每个有 $k$ 个二进制位的掩码，一共有 $2^k$ 个子掩码，而一共有 $C(n,k)$
 个掩码的二进制位 $1$ 个数为 $k$。故总和为：$\sum\limits_{i=1}^nC_n^k 2^k$，根据二项式定理 $(a+b)^n=\sum\limits_{k=1}^n C_n^k a^k b^{n-k}$，令 $a=2,b=1$，总和为 $O(3^n)$</p>
-<h2 id="例题">例题</h2>
+<h2 id="heading2">例题</h2>
 <ol>
 <li><a href="https://leetcode.cn/problems/parallel-courses-ii/">1494. 并行课程 II</a></li>
 <li><a href="https://leetcode.cn/problems/triples-with-bitwise-and-equal-to-zero/">982. 按位与为零的三元组</a></li>
 </ol>
-<h2 id="参考">参考</h2>
+<h2 id="heading3">参考</h2>
 <p><a href="https://oi-wiki.org/math/binary-set/">二进制集合操作</a></p>
 
         </div>
@@ -288,6 +290,10 @@
     </li>
     
     <li>
+        <a href="https://zzzyc.github.io/cs/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E8%BF%87%E7%A8%8B/" title="获取目的主机地址的过程" target="_blank">获取目的主机地址的过程</a>
+    </li>
+    
+    <li>
         <a href="https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/" title="子集枚举" target="_blank">子集枚举</a>
     </li>
     
@@ -315,20 +321,16 @@
         <a href="https://zzzyc.github.io/algorithm/%E4%BA%8C%E5%88%86%E5%9B%BE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%E8%B4%A8/" title="二分图的相关性质" target="_blank">二分图的相关性质</a>
     </li>
     
-    <li>
-        <a href="https://zzzyc.github.io/algorithm/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84%E7%9A%84DFS%E5%AD%98%E5%82%A8%E9%A1%BA%E5%BA%8F/" title="欧拉路径的DFS存储顺序" target="_blank">欧拉路径的DFS存储顺序</a>
-    </li>
-    
 </ul>
     </section>
 
     
 
     <section class="widget">
-        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+        <h3 class="widget-title"><a href='/categories/'>categories</a></h3>
 <ul class="widget-list">
     
-    <li><a href="https://zzzyc.github.io/categories/CS/">CS (1)</a></li>
+    <li><a href="https://zzzyc.github.io/categories/CS/">CS (2)</a></li>
     
     <li><a href="https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/">工具 (1)</a></li>
     
@@ -344,7 +346,7 @@
     </section>
 
     <section class="widget">
-        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+        <h3 class="widget-title"><a href='/tags/'>tags</a></h3>
 <div class="tagcloud">
     
     <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
@@ -384,6 +386,8 @@
     <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
     
     <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
     
     <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
     
