@@ -6,10 +6,19 @@
     <description>Recent content in 题解 on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Sun, 07 May 2023 17:24:48 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 Jul 2023 12:46:49 +0800</lastBuildDate>
     
 	<atom:link href="https://zzzyc.github.io/solution/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>赛后战神1</title>
+      <link>https://zzzyc.github.io/solution/unsolved_problems_during_contest/</link>
+      <pubDate>Sun, 23 Jul 2023 12:46:49 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/solution/unsolved_problems_during_contest/</guid>
+      <description>Unsolved_problems_during_contest</description>
+    </item>
     
     <item>
       <title>LeetCode 2023 春季杯团队赛</title>
