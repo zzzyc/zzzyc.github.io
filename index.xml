@@ -6,27 +6,27 @@
     <description>Recent content on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Wed, 05 Jul 2023 16:04:32 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 10 Oct 2023 15:31:02 +0800</lastBuildDate>
     
 	<atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>更新线</title>
-      <link>https://zzzyc.github.io/post/%E6%9B%B4%E6%96%B0%E7%BA%BF/</link>
-      <pubDate>Fri, 16 Jun 2023 15:43:50 +0800</pubDate>
+      <title>【LevelDB】代码解析总结</title>
+      <link>https://zzzyc.github.io/cs/LevelDB%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Tue, 10 Oct 2023 15:31:02 +0800</pubDate>
       
-      <guid>https://zzzyc.github.io/post/%E6%9B%B4%E6%96%B0%E7%BA%BF/</guid>
-      <description>更新线</description>
+      <guid>https://zzzyc.github.io/cs/LevelDB%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90%E6%80%BB%E7%BB%93/</guid>
+      <description>【LevelDB】代码解析总结</description>
     </item>
     
     <item>
-      <title>构造题随记</title>
-      <link>https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/</link>
-      <pubDate>Wed, 17 May 2023 11:46:04 +0800</pubDate>
+      <title>【LevelDB】LevelDB 中的各种 key</title>
+      <link>https://zzzyc.github.io/cs/LevelDBLevelDB%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Dkey/</link>
+      <pubDate>Tue, 10 Oct 2023 13:31:02 +0800</pubDate>
       
-      <guid>https://zzzyc.github.io/algorithm/%E6%9E%84%E9%80%A0%E9%A2%98%E9%9A%8F%E8%AE%B0/</guid>
-      <description>构造题随记</description>
+      <guid>https://zzzyc.github.io/cs/LevelDBLevelDB%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Dkey/</guid>
+      <description>【LevelDB】LevelDB 中的各种 key</description>
     </item>
     
     <item>
@@ -54,6 +54,15 @@
       
       <guid>https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/</guid>
       <description>子集枚举</description>
+    </item>
+    
+    <item>
+      <title>SFX 2023决赛</title>
+      <link>https://zzzyc.github.io/solution/SFX-2023%E5%86%B3%E8%B5%9B/</link>
+      <pubDate>Sun, 11 Jun 2023 11:27:56 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/solution/SFX-2023%E5%86%B3%E8%B5%9B/</guid>
+      <description>SFX 2023决赛 20230610</description>
     </item>
     
     <item>
@@ -120,6 +129,15 @@
     </item>
     
     <item>
+      <title>CMU15445 12查询优化II</title>
+      <link>https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/</link>
+      <pubDate>Wed, 03 May 2023 09:13:00 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/</guid>
+      <description>查询优化II</description>
+    </item>
+    
+    <item>
       <title>有向图的强连通分量</title>
       <link>https://zzzyc.github.io/algorithm/%E6%9C%89%E5%90%91%E5%9B%BE%E7%9A%84%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/</link>
       <pubDate>Tue, 02 May 2023 20:07:22 +0800</pubDate>
@@ -138,30 +156,12 @@
     </item>
     
     <item>
-      <title>20230415_美团实习笔试</title>
-      <link>https://zzzyc.github.io/solution/20230415_%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AF%95/</link>
-      <pubDate>Sat, 29 Apr 2023 13:39:28 +0800</pubDate>
-      
-      <guid>https://zzzyc.github.io/solution/20230415_%E7%BE%8E%E5%9B%A2%E5%AE%9E%E4%B9%A0%E7%AC%94%E8%AF%95/</guid>
-      <description>20230415_美团实习笔试</description>
-    </item>
-    
-    <item>
       <title>Conference</title>
       <link>https://zzzyc.github.io/research/conference/</link>
       <pubDate>Fri, 28 Apr 2023 14:08:00 +0800</pubDate>
       
       <guid>https://zzzyc.github.io/research/conference/</guid>
       <description>Conference</description>
-    </item>
-    
-    <item>
-      <title>20230423_合肥38所笔试</title>
-      <link>https://zzzyc.github.io/solution/20230423_%E5%90%88%E8%82%A538%E6%89%80%E7%AC%94%E8%AF%95/</link>
-      <pubDate>Thu, 27 Apr 2023 20:01:11 +0800</pubDate>
-      
-      <guid>https://zzzyc.github.io/solution/20230423_%E5%90%88%E8%82%A538%E6%89%80%E7%AC%94%E8%AF%95/</guid>
-      <description>20230423_合肥38所笔试</description>
     </item>
     
     <item>
@@ -180,15 +180,6 @@
       
       <guid>https://zzzyc.github.io/research/conclusion/</guid>
       <description>阅读论文总结</description>
-    </item>
-    
-    <item>
-      <title>20230415_携程研发岗笔试</title>
-      <link>https://zzzyc.github.io/solution/20230415_%E6%90%BA%E7%A8%8B%E7%A0%94%E5%8F%91%E5%B2%97%E7%AC%94%E8%AF%95/</link>
-      <pubDate>Mon, 24 Apr 2023 20:32:42 +0800</pubDate>
-      
-      <guid>https://zzzyc.github.io/solution/20230415_%E6%90%BA%E7%A8%8B%E7%A0%94%E5%8F%91%E5%B2%97%E7%AC%94%E8%AF%95/</guid>
-      <description>2023年04月15日携程研发岗笔试</description>
     </item>
     
     <item>

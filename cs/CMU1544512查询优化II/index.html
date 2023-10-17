@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>CMU15445 12查询优化II | solego&#39;s blog</title>
+    <meta property="og:title" content="CMU15445 12查询优化II - solego&#39;s blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2023-05-03T09:13:00&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-05-03T09:13:00&#43;08:00'>
+        
+    <meta name="Keywords" content="">
+    <meta name="description" content="CMU15445 12查询优化II">
+        
+    <meta name="author" content="solego">
+    <meta property="og:url" content="https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zzzyc.github.io/">
+                        solego&#39;s blog
+                    </a>
+                
+                <p class="description">迷茫中找寻归途</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="" href="https://zzzyc.github.io/">首页</a>
+                    
+                    <a  href="https://zzzyc.github.io/cs/" title="CS">CS</a>
+                    
+                    <a  href="https://zzzyc.github.io/algorithm/" title="算法">算法</a>
+                    
+                    <a  href="https://zzzyc.github.io/tool/" title="工具">工具</a>
+                    
+                    <a  href="https://zzzyc.github.io/solution/" title="题解">题解</a>
+                    
+                    <a  href="https://zzzyc.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zzzyc.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">CMU15445 12查询优化II</h1>
+        </header>
+        
+  <time datetime="2023-05-03T01:13:00Z" class="post-meta meta-date dt-published">
+    2023年5月3日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='/categories/CS' target="_blank">CS</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h1 id="heading">前言</h1>
+<h2 id="heading1">为什么要考虑并发问题？</h2>
+<ol>
+<li>
+<p>提升性能</p>
+<ul>
+<li>吞吐量，每秒可以处理的SQL指令</li>
+<li>等待时间，单SQL指令在单线程情况下可能要6s，多线程可以缩减为3s</li>
+</ul>
+</li>
+<li>
+<p>提升响应性和可用性</p>
+<p>数据库作为底层，服务于上层系统。
+提升数据库的响应性和可用性也就提高了上层系统的响应性和可用性。</p>
+</li>
+<li>
+<p>潜在地较低的TCO(total cost of ownership)</p>
+<p>计算硬件的费用，往往使用TCO这个指标。假设一台机器可以使用10年，10年可以处理多少条数据，处理这些数据需要多少电费。</p>
+<p>如果提高数据库的效率，使得它处理一条数据效率更高，需要的电费更少。并行执行和并发执行如果高效，就可以节省这些费用。</p>
+</li>
+</ol>
+<h2 id="-vs-">数据库并行 VS 分布式</h2>
+<ol>
+<li>
+<p>将数据库分布在多个机器上，以改进DBMS的不同方面</p>
+</li>
+<li>
+<p>分布式数据库经常将数据库切分成多个节点，对于客户端来说，只需要连接上一个节点，就相当于连接了整个分布式数据库。</p>
+<ul>
+<li>单线程的数据库和并行数据库或者分布式数据库对于同样一条SQL指令应该产生相同的结果</li>
+</ul>
+</li>
+<li>
+<p>并行数据库（Parallel）</p>
+<ul>
+<li>
+<p>资源应该是相邻的
+假设数据库是多线程并发的。相邻指的是线程都在同一个CPU上，同一个内存上</p>
+</li>
+<li>
+<p>资源之间的通信是高速执行的。
+对于在同一个内存中的通信，可以直接使用内存通信，所以通信是高速的</p>
+</li>
+<li>
+<p>并行数据库的进程或线程的通信是简单可靠的。
+多线程并发的线程通信是通过内存进行的，这是简单可靠的。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>分布式数据库（Distributed）</p>
+<ul>
+<li>
+<p>资源之间是很远的。
+因为资源再不同的节点上，不同节点的物理位置可能相差很远，跨市跨省跨国跨洲之类。</p>
+</li>
+<li>
+<p>资源之间的通信是很慢的。
+对于不在同一个节点上的通信，需要使用网络通信，而网络通信相较于同一台机器上的内存通信是很慢的。</p>
+</li>
+<li>
+<p>分布式数据库的花费和产生的问题不可被忽略。
+通信之间产生的问题以及通信速度较慢以及花费等问题必须被考虑。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="heading2">主要内容</h1>
+<h2 id="process-model">处理模型（Process Model）</h2>
+<ol>
+<li>
+<p>一个数据库的处理模型（Process Model）定义的是：如何构建一个支持多用户的并发请求系统。</p>
+</li>
+<li>
+<p>一个 worker 是数据库的一个组件，在收到来自用户的请求后，系统将请求拆分成多个部分，每个部分交由一个 worker 执行。</p>
+</li>
+<li>
+<p>三大方向</p>
+<ol>
+<li>每个 worker 是一个进程 （Process per DBMS Worker）</li>
+<li>进程池 （Process Pool）</li>
+<li>每个 worker 是一个线程 （Thread per DBMS Worker）</li>
+</ol>
+</li>
+</ol>
+<h2 id="process-per-dbms-worker">Process per DBMS Worker</h2>
+<p>每一个 worker 分配一个进程去执行相应的任务。在 Linux 下，这个进程会对应到一个具体的 pid 。</p>
+<ul>
+<li>依赖于操作系统的进程调度</li>
+<li>操作系统开辟一个共享内存来方便进程间通信，共享全局的数据结构</li>
+<li>一个进程崩溃不会使得整个系统宕机</li>
+<li>例子：IBM、DB2、Postgres、Oracle</li>
+</ul>
+<p>问题：进程开销过大，如果每个 worker 一个进程，开辟进程与回收进程都会产生很多开销，进而考虑优化，就是池化。</p>
+<h2 id="process-pool">Process Pool</h2>
+<p>每一个 worker 从进程池中请求一个空闲进程。</p>
+<ul>
+<li>仍然依赖于操作系统的进程调度和共享内存</li>
+<li>对于 CPU 的缓存局部性是不利的（<code>这块没讲清楚</code>）</li>
+<li>例子：IBM、DB2、Postgres</li>
+</ul>
+<h2 id="thread-per-worker">Thread per Worker</h2>
+<p>一个进程，但是拥有多个 workder 线程</p>
+<ul>
+<li>DBMS 负责其 workder 的调度</li>
+<li>使用或者不使用 dispatcher（分发器，将一个SQL指令拆分成多个子任务）</li>
+<li>线程崩溃可能会使得进程崩溃</li>
+<li>例子：IBM、DB2、MSSQL、MySQL、Oracle</li>
+</ul>
+<h2 id="heading3">三种处理模型</h2>
+<ol>
+<li>Thread per Worker 的优点在于：</li>
+</ol>
+<ul>
+<li>每个上下文切换（context switch）的开销更少</li>
+<li>不需要管理共享内存（同一进程下的多个线程天然是共享内存的，只有进程拥有CPU分配的资源）</li>
+</ul>
+<ol start="2">
+<li>Thread per Worker 模型并不意味着数据库支持单SQL语句中各部分是并发的，这只是针对多个SQL语句，每个SQL语句是并发的。</li>
+</ol>
+<blockquote>
+<p>针对单个SQL语句进行并发有另外的讨论</p>
+</blockquote>
+<h2 id="heading4">调度</h2>
+<p>针对每个查询计划，DBMS需要去确定何时、在哪里以及如何执行。</p>
+<ul>
+<li>把单个查询计划切分成多少个子任务</li>
+<li>每个任务需要多少个CPU资源</li>
+<li>哪些CPU需要执行哪些任务</li>
+<li>如何将执行完毕得到返回子任务的结果再拼接起来</li>
+</ul>
+<p>DBMS 应该控制如何调度，而不是完全交由操作系统去调度</p>
+<h2 id="interintraquery-parallelism">Inter/Intra-Query Parallelism</h2>
+<blockquote>
+<p>查询之间的并发处理和查询内部的并发处理</p>
+</blockquote>
+<ol>
+<li>
+<p>Inter-Query: 不同查询的并发执行</p>
+<ul>
+<li>提升吞吐量（throughput） &amp; 降低等待时间（latency）</li>
+</ul>
+</li>
+<li>
+<p>Intra-Query: 并发地执行单个查询的所有子任务</p>
+<ul>
+<li>降低需要很长时间运行的查询（long-running queries）的等待时间（latency）</li>
+</ul>
+</li>
+</ol>
+<h2 id="interquery-paralleism">Inter-Query Paralleism</h2>
+<ol>
+<li>
+<p>通过允许多个查询的同时执行来提高整体性能</p>
+</li>
+<li>
+<p>如果所有的并发查询都是只读的，只读查询间的冲突是很少的，所以只需要很少的维护和操作就可以了。</p>
+</li>
+<li>
+<p>如果多个查询在同时更新数据库，并发执行这些查询很难保证查询的顺序，也就是说需要并发控制去维护数据库的数据正确性。（lecture15，并发控制）</p>
+</li>
+</ol>
+<h2 id="intraquery-paralleism">Intra-Query Paralleism</h2>
+<ol>
+<li>
+<p>通过并行执行单个查询，提升单个查询的性能</p>
+</li>
+<li>
+<p>从 producer/consumer 的角度来考虑如何进行每个操作（比如投影，聚集，连接这些算子）执行的组织问题。</p>
+</li>
+<li>
+<p>每个操作都有并发的版本，有如下两种并发思路</p>
+<ul>
+<li>多线程访问集中式数据结构（centralized data structures）：在这种策略中，所有线程共享一个数据结构，因此需要确保在进行读写操作时遵循一定的同步规则，以防止数据不一致和竞态条件。</li>
+<li>使用分区（partitioning）划分工作：这种策略将数据结构分成多个独立的部分（分区），每个线程只能访问其所分配的分区。这样可以减少锁定和同步的开销，同时提高并行性。</li>
+</ul>
+</li>
+</ol>
+<h2 id="-grace-hash-join-paralleism-grace-hash-join">并发版本的 Grace Hash Join （Paralleism Grace Hash Join）</h2>
+<p><img src="/images/1.png" alt=""></p>
+<p>如图所示R 表和 S 表都做一个 Hash Join，然后写入硬盘后得到一堆桶。这里可以看到对于 R 表和 S 表，各有 max + 1 个桶，那么对于 R 表的第一个桶和 S 表的第一个桶，使用一个 worker 去进行 join。一共使用 max + 1 个 worker 即可并行地进行 join。</p>
+<h2 id="intraquery-paralleism-">Intra-Query Paralleism 的三种方式</h2>
+<ul>
+<li>
+<p>Intra-Operator(Horizontal，水平的)，将 query plan tree 水平切分</p>
+</li>
+<li>
+<p>Intra-Operator(Vertical，垂直的)，将 query plan tree 垂直切分</p>
+</li>
+<li>
+<p>Bushy（Horizontal 和 Vertical 结合）</p>
+</li>
+</ul>
+<h3 id="intraoperatorhorizontal">Intra-Operator(Horizontal)</h3>
+<p>将数据可以被分成 n 块，让 n 个线程分别处理这 n 块数据。</p>
+<p>DBMS 在 query plan 中插入一个 <code>exchange</code> 算子来</p>
+<ul>
+<li>合并来自多个子算子的结果（聚集）</li>
+<li>将父算子的数据拆分给每个子算子进行计算（拆分）</li>
+</ul>
+<p>即用来进行数据的聚集、拆分。</p>
+<p><img src="/images/2.png" alt=""></p>
+<p>对于这个图中的例子，<code>exchange</code> 先将数据拆分成 5 pages，并将 1 个选择算子 $\sigma$ 拆分成 3 个选择算子 $\sigma$ 。</p>
+<p>使用 3 个 worker 分别执行 $\sigma_1, \sigma_2, \sigma_3$，开始时，$\sigma_1, \sigma_2, \sigma_3$ 分别执行 page1，page2，page3
+由于是并行的，所以可以粗略认为这三个算子的执行速度是一样的，执行结束后，$\sigma_1, \sigma_2$ 再分别执行 page4 和 page5。</p>
+<p>这里需要注意的是，如果 <code>exchange</code> 的父算子是一个 <code>projection</code> 投影算子 $\prod$ ，其调用子算子 $\sigma$ 的 $next()$ 时，子算子应该将所有符合条件的数据都拿到，否则这里的并发对于子算子 $\sigma$ 来说就是假的并发。</p>
+<h2 id="exchange-operatorexchange-">Exchange Operator（Exchange 算子）</h2>
+<p>Exchange 算子分为如下三种</p>
+<ul>
+<li>
+<p>Gather算子是指聚集。</p>
+<p>将数据拆分成多份，多个 worker 并发执行，获得每个 worker 的执行结果，由 Gather 算子对结果进行聚集。</p>
+</li>
+<li>
+<p>Distribute算子是指分配。</p>
+<p>将数据拆分成多份，由多个 worker 并发执行。</p>
+</li>
+<li>
+<p>Repartition算子是指先聚集再分配</p>
+<p>将n个算子的结果先进行聚集成一份，然后再拆分成m份输出（这种情况是父算子为 2 个 worker，而子算子为 3 个worker的情况）。</p>
+</li>
+</ul>
+<p><img src="/images/3.png" alt="">
+这个例子是在说明 Intra-Query。这里在实际执行时，先进行投影，然后再连接，去掉不必要的列。</p>
+<p>对于 A 表，将其数据拆分为 3 部分，使用 3 个 worker 并行执行，然后由 <code>exchange</code> 算子聚集得到一个整的 hash 表。</p>
+<p>对于 B 表，也将其数据拆分为 3 部分，使用 3 个 worker 并行执行，但是对于 B 表来说，其数据的拆分并不能保证所有 join 列相同的行都被拆分到同一个 worker 下，
+所以需要对每个 B 的 worker 得到的结果都去与 A 进行 join。B 的 3 个 worker 与 A join 得到的结果交由一个 <code>exchange</code> 算子进行聚集。</p>
+<h3 id="intraoperatorvertical">Intra-Operator(Vertical)</h3>
+<p>对于每一个层级的算子，都会有一堆 worker 处理这个层级的操作。</p>
+<p>然后将结果交由上一个层级的算子进行，但是如果子层级的 worker 很慢，那么父层级的算子就也被迫很慢。</p>
+<p>也称为 <code>pipline parallelism</code></p>
+<p><img src="/images/4.png" alt=""></p>
+<h3 id="heading5">观察发现</h3>
+<p>在面向磁盘的数据库中，大多的瓶颈在于读写磁盘，之前讨论的并行执行大多都是考虑数据已经被加载进内存的情况。</p>
+<p>使用多进程或者多线程方式去并行执行 query 并不会提升效率，还有可能降低效率。这是因为磁盘是主要的瓶颈。</p>
+<ul>
+<li>事实上，如果每个 worker 都去访问磁盘的不同部分（即对于一份数据分成若干份，每个 worker 读取对应的一份，一个磁盘疲于应付多个 worker ，反而降低了效率）会使得情况更坏。</li>
+</ul>
+<h2 id="io-pararllelism-io">I/O Pararllelism （I/O并发）</h2>
+<p>将 DBMS 拆分到多个存储设备上（将数据物理上拆分）</p>
+<ul>
+<li>每个数据有多个磁盘</li>
+<li>每个磁盘一个数据库</li>
+<li>每个磁盘一种关系</li>
+<li>将一种关系拆分到多个磁盘上</li>
+<li>&hellip;</li>
+</ul>
+<h2 id="multidisk-parallelism-">Multi-Disk Parallelism （多磁盘并发）</h2>
+<p>在操作系统或者硬件层面来存储DBMS的文件到多个存储设备上</p>
+<ul>
+<li>storage appliances</li>
+<li>RAID(redundant array of independent disks，独立磁盘冗余阵列) configuration</li>
+</ul>
+<p>对于操作系统是透明的。</p>
+<ul>
+<li>RAID0（Striping，一个文件拆分成多份，每份存到一个磁盘上，一个磁盘损坏则对应的文件都损坏）</li>
+<li>RAID1（Mirroring，一份数据存到多个磁盘上）</li>
+<li>RAID5（三个盘，两个磁盘存数据，一个盘存另外两个盘的异或，如果数据盘1损坏，可以通过异或盘与数据盘1进行异或获得数据盘2的数据）</li>
+<li>基于 RAID5，可以存多个异或，这样当多个盘损坏也能通过异或操作恢复数据。</li>
+</ul>
+<h2 id="heading6">分库（数据库拆分）</h2>
+<ol>
+<li>
+<p>一些DBMS允许指定每个库存放的磁盘位置</p>
+<ul>
+<li>缓存池管理器将一个页映射到一个磁盘位置（意思是存储一个库对应的磁盘位置）</li>
+</ul>
+</li>
+<li>
+<p>如果DBMS将每个库存储在分开的目录（即一个库一个目录）中，操作文件系统级别是很容易的</p>
+<ul>
+<li>如果事务是更新多个数据库，那么DBMS恢复日志文件仍然需要是共享的</li>
+</ul>
+</li>
+</ol>
+<h2 id="heading7">分区（将单个表物理上分为多个表）</h2>
+<ol>
+<li>
+<p>垂直分区</p>
+<ul>
+<li>
+<p>假设一个表有列(A,B,C,D)，其中D列中每行的数据量很大，但是D列在实际使用中很少用，则可以将其在物理上拆分为(A,B,C)和(D) 两个表。这样在查询该表时，就可以进行并发了，因为 (A,B,C) 的数据量与 (D) 基本一致，这样使用 多个 worker 进行并发查询，就可以加速。</p>
+<p>通常是将一种表分为：高频但是数据量小的、低频但是数据量大的 两种类型的表。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>水平分区</p>
+<ul>
+<li>假设一张表有 100 万行数据，将这张表水平分成两张 50 万行数据的表。这两张表分到不同的磁盘中去，由数据库去负责在查询时将这两张表统一起来（数据库要知道这两张表在逻辑上是一张表）。分表时，需要告诉数据库分表的标准（以哪一列来分，比如 id &lt;= 500000 的在一张表，id &gt; 500000 的在一张表）。</li>
+</ul>
+</li>
+</ol>
+<p>还有一些分库分表的中间件，它们是一些网关（Gateway），连上这些网关的方式类似于连接上数据库，但是这些中间件不负责存储数据，只负责分割数据（比如将数据分成 5 部分，连着 5 个数据库，每个数据库在不同节点上），将数据分配到不同的数据库上。</p>
+<p>最初始的分布式数据库思想：就是将数据拆分成 n 份，创建多个数据库去存储每份数据。当进行查询、删除和更新时，也会将对应的操作通过网关分别对应到 n 个数据库上去进行操作。</p>
+<h2 id="heading8">总结</h2>
+<p>并发执行是非常重要的，几乎所有的主流数据库都实现了（至少是逻辑上的SQL语句的并发，主流数据库都实现了。）。</p>
+<p>上述问题说起来很简单，但实际实现时的问题很多：</p>
+<ul>
+<li>Coordination Overhead（不同 worker 之间的开销协调，比如一个 worker 需要负责大量的数据，而另一个 worker 只需要负责少部分数据，其实总开销取决于开销更大的 worker ，如果平均两个 worker 的开销，就可以降低总开销</li>
+<li>Scheduling（不同 worker 之间的调度</li>
+<li>Concurrency Issues（不同线程之间的并发，比如什么时候需要加锁</li>
+<li>Resource Contention（资源冲突，比如两个 worker 都要读写磁盘</li>
+</ul>
+<!-- 虽然是一个小时的课程，但是确实花费了很多时间去理解和记录，道阻且长，任重道远 -->
+        </div>
+
+        
+
+
+        
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E6%95%B0%E6%8D%AE%E5%BA%93' target="_blank">数据库</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="https://zzzyc.github.io/">solego&#39;s blog By solego</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zzzyc.github.io/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zzzyc.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/LevelDB%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90%E6%80%BB%E7%BB%93/" title="【LevelDB】代码解析总结" target="_blank">【LevelDB】代码解析总结</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/LevelDBLevelDB%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Dkey/" title="【LevelDB】LevelDB 中的各种 key" target="_blank">【LevelDB】LevelDB 中的各种 key</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/kuangbin%E4%B8%93%E9%A2%987-%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="Kuangbin专题7 线段树" target="_blank">Kuangbin专题7 线段树</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/%E8%8E%B7%E5%8F%96%E7%9B%AE%E7%9A%84%E4%B8%BB%E6%9C%BA%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BF%87%E7%A8%8B/" title="获取目的主机地址的过程" target="_blank">获取目的主机地址的过程</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/" title="子集枚举" target="_blank">子集枚举</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/tool/Unix%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Unix常用命令" target="_blank">Unix常用命令</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="无向图的双连通分量" target="_blank">无向图的双连通分量</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/tool/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/" title="数据对拍器" target="_blank">数据对拍器</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/UTF-8%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D/" title="UTF-8编码介绍" target="_blank">UTF-8编码介绍</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/" title="CMU15445 12查询优化II" target="_blank">CMU15445 12查询优化II</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>categories</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://zzzyc.github.io/categories/CS/">CS (5)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/">工具 (1)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E6%AF%94%E8%B5%9B/">比赛 (2)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (6)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">闲谈 (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>tags</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
+    
+    <a href="https://zzzyc.github.io/tags/LeetCode/">LeetCode</a>
+    
+    <a href="https://zzzyc.github.io/tags/LevelDB/">LevelDB</a>
+    
+    <a href="https://zzzyc.github.io/tags/UTF-8/">UTF-8</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BA%8C%E5%88%86%E5%9B%BE/">二分图</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/">位运算</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/">字符编码</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AF%B9%E6%8B%8D/">对拍</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">强连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">拓扑排序</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E5%9B%A2/">最大团</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/">最大独立集</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E8%BE%B9%E5%8C%B9%E9%85%8D/">最大边匹配</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E7%82%B9%E8%A6%86%E7%9B%96/">最小点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E9%87%8D%E5%A4%8D%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小重复路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E8%BF%91/">最近</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
+    
+</div>
+    </section>
+
+    
+
+    
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
