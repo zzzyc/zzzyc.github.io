@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>英语 on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/english/</link>
+    <description>Recent content in 英语 on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Tue, 17 Oct 2023 18:31:42 +0800</lastBuildDate>
+    
+	<atom:link href="https://zzzyc.github.io/english/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>语法长难句</title>
+      <link>https://zzzyc.github.io/english/%E8%AF%AD%E6%B3%95%E9%95%BF%E9%9A%BE%E5%8F%A5/</link>
+      <pubDate>Tue, 17 Oct 2023 18:31:42 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/english/%E8%AF%AD%E6%B3%95%E9%95%BF%E9%9A%BE%E5%8F%A5/</guid>
+      <description>语法长难句</description>
+    </item>
+    
+  </channel>
+</rss>
