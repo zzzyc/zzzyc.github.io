@@ -29,5 +29,14 @@
       <description>UTF-8编码介绍</description>
     </item>
     
+    <item>
+      <title>CMU15445 12查询优化II</title>
+      <link>https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/</link>
+      <pubDate>Wed, 03 May 2023 09:13:00 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/cs/CMU1544512%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96II/</guid>
+      <description>查询优化II</description>
+    </item>
+    
   </channel>
 </rss>
