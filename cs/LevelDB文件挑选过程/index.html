@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>【LevelDB】文件挑选过程 | solego&#39;s blog</title>
+    <meta property="og:title" content="【LevelDB】文件挑选过程 - solego&#39;s blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2023-10-24T14:57:05&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2023-10-24T14:57:05&#43;08:00'>
+        
+    <meta name="Keywords" content="">
+    <meta name="description" content="【LevelDB】文件挑选过程">
+        
+    <meta name="author" content="solego">
+    <meta property="og:url" content="https://zzzyc.github.io/cs/LevelDB%E6%96%87%E4%BB%B6%E6%8C%91%E9%80%89%E8%BF%87%E7%A8%8B/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zzzyc.github.io/">
+                        solego&#39;s blog
+                    </a>
+                
+                <p class="description">迷茫中找寻归途</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="" href="https://zzzyc.github.io/">首页</a>
+                    
+                    <a  href="https://zzzyc.github.io/cs/" title="CS">CS</a>
+                    
+                    <a  href="https://zzzyc.github.io/algorithm/" title="算法">算法</a>
+                    
+                    <a  href="https://zzzyc.github.io/english/" title="英语">英语</a>
+                    
+                    <a  href="https://zzzyc.github.io/tool/" title="工具">工具</a>
+                    
+                    <a  href="https://zzzyc.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zzzyc.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">【LevelDB】文件挑选过程</h1>
+        </header>
+        
+  <time datetime="2023-10-24T06:57:05Z" class="post-meta meta-date dt-published">
+    2023年10月24日
+  </time>
+
+
+<div class="post-meta meta-category">
+  <span>&nbsp;|</span>
+  
+    <a href='/categories/CS' target="_blank">CS</a>
+  
+</div>
+
+
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">&nbsp;|
+                <span id="busuanzi_value_page_pv"></span> <span>阅读</span>
+            </span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>目前对于 <code>GetOverlappingInputs</code> 和 <code>AddBoundaryInputs</code> 两部分的区别还是不太明白。</p>
+<p>本质是对于两者的具体实现还有所不知。</p>
+<p>下面进行一个浅析。</p>
+<p>首先需要清楚的是。</p>
+<p>InternalKey 的组成为：UserKey + SequenceNumber + ValueType</p>
+<p>在 MemTable 中，即这个 SkipList 中，本质上 Node 中只存储了 key ，<br>
+这个 key = InternalKeySize + InternalKey + ValueSize + Value</p>
+<p>通过 SequenceNumber 就可以保证每个 InternalKey 都一定不同。</p>
+<p>这里注意的是，SkipList 中所使用的 Comparator 是 InternalKeyComparator 。</p>
+<p>InternalKeyComparator 所采用的比较方式是，先 UserKey ，UserKey 相同的情况下比较 SequenceNumber 。</p>
+<h2 id="getoverlappinginputs"><code>GetOverlappingInputs</code></h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#998;font-style:italic">// 传入的 begin 和 end 是 InternalKey
+</span><span style="color:#998;font-style:italic"></span><span style="color:#458;font-weight:bold">void</span> Version<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>GetOverlappingInputs(<span style="color:#458;font-weight:bold">int</span> level, <span style="color:#000;font-weight:bold">const</span> InternalKey<span style="color:#000;font-weight:bold">*</span> begin,
+                                   <span style="color:#000;font-weight:bold">const</span> InternalKey<span style="color:#000;font-weight:bold">*</span> end,
+                                   std<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>vector<span style="color:#000;font-weight:bold">&lt;</span>FileMetaData<span style="color:#000;font-weight:bold">*</span><span style="color:#000;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">*</span> inputs) {
+  assert(level <span style="color:#000;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>);
+  assert(level <span style="color:#000;font-weight:bold">&lt;</span> config<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>kNumLevels);
+  inputs<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>clear();
+  Slice user_begin, user_end;
+  <span style="color:#000;font-weight:bold">if</span> (begin <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span>) {
+    user_begin <span style="color:#000;font-weight:bold">=</span> begin<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>user_key();
+  }
+  <span style="color:#000;font-weight:bold">if</span> (end <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span>) {
+    user_end <span style="color:#000;font-weight:bold">=</span> end<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>user_key();
+  }
+  <span style="color:#000;font-weight:bold">const</span> Comparator<span style="color:#000;font-weight:bold">*</span> user_cmp <span style="color:#000;font-weight:bold">=</span> vset_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>icmp_.user_comparator();
+  <span style="color:#000;font-weight:bold">for</span> (size_t i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>; i <span style="color:#000;font-weight:bold">&lt;</span> files_[level].size();) {
+    FileMetaData<span style="color:#000;font-weight:bold">*</span> f <span style="color:#000;font-weight:bold">=</span> files_[level][i<span style="color:#000;font-weight:bold">+</span><span style="color:#000;font-weight:bold">+</span>];
+    <span style="color:#000;font-weight:bold">const</span> Slice file_start <span style="color:#000;font-weight:bold">=</span> f<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>smallest.user_key();
+    <span style="color:#000;font-weight:bold">const</span> Slice file_limit <span style="color:#000;font-weight:bold">=</span> f<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>largest.user_key();
+    <span style="color:#000;font-weight:bold">if</span> (begin <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span> <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span> user_cmp<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>Compare(file_limit, user_begin) <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">0</span>) {
+      <span style="color:#998;font-style:italic">// file 最大值 file_limit 小于 user_begin，则必然不存在交集
+</span><span style="color:#998;font-style:italic"></span>      <span style="color:#998;font-style:italic">// &#34;f&#34; is completely before specified range; skip it
+</span><span style="color:#998;font-style:italic"></span>    } <span style="color:#000;font-weight:bold">else</span> <span style="color:#900;font-weight:bold">if</span> (end <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span> <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span> user_cmp<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>Compare(file_start, user_end) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>) {
+      <span style="color:#998;font-style:italic">// file 最小值 file_start 小于 user_end，则必然不存在交集
+</span><span style="color:#998;font-style:italic"></span>      <span style="color:#998;font-style:italic">// &#34;f&#34; is completely after specified range; skip it
+</span><span style="color:#998;font-style:italic"></span>    } <span style="color:#000;font-weight:bold">else</span> {
+      <span style="color:#998;font-style:italic">// 当前文件和区间有交集，则将其加入 Compaction 中
+</span><span style="color:#998;font-style:italic"></span>      inputs<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>push_back(f);
+      <span style="color:#000;font-weight:bold">if</span> (level <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>) {
+        <span style="color:#998;font-style:italic">// 0 层需要特殊考虑，因为 0 层的文件自身也会互相产生交集
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 具体就是 0 层需要修改 user_begin 和 user_end
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 如果遇到一个 file_limit &gt; user_end ，更新 user_end = file_limit 
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 如果遇到一个 file_start &lt; user_begin ，更新 user_begin = file_start
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 然后从第一个文件根重新开始遍历，以最新的 [user_begin, user_end]
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 这样不断扩充，因为 0 层文件很小，所以我们考虑直接暴力即可。
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// Level-0 files may overlap each other.  So check if the newly
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// added file has expanded the range.  If so, restart search.
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">if</span> (begin <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span> <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span> user_cmp<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>Compare(file_start, user_begin) <span style="color:#000;font-weight:bold">&lt;</span> <span style="color:#099">0</span>) {
+          user_begin <span style="color:#000;font-weight:bold">=</span> file_start;
+          inputs<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>clear();
+          i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+        } <span style="color:#000;font-weight:bold">else</span> <span style="color:#900;font-weight:bold">if</span> (end <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">nullptr</span> <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span>
+                   user_cmp<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>Compare(file_limit, user_end) <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#099">0</span>) {
+          user_end <span style="color:#000;font-weight:bold">=</span> file_limit;
+          inputs<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>clear();
+          i <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+        }
+      }
+    }
+  }
+
+  <span style="color:#998;font-style:italic">// 最后 inputs 中就是与 [user_begin, user_end] 直接重叠或者间接重叠的所有文件
+</span><span style="color:#998;font-style:italic"></span>}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="addboundaryinputs"><code>AddBoundaryInputs</code></h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#998;font-style:italic">// l ==&gt; low, u ==&gt; up
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 从 compaction_files 中获取最大的文件 b1 ，然后在 level_files 中找到一个 b2 ，
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 满足 b1 中的最大值的 user_key 和 b2 中的最小值的 user_key 相等
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 如果找到这么一个 b2 ，那么就将其将入到 compaction_files 中，
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 然后以 compaction_files 中最大的文件来继续搜索
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 此时最大的文件已经更新了，更新为 b2 了
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 
+</span><span style="color:#998;font-style:italic"></span>
+<span style="color:#998;font-style:italic">// Extracts the largest file b1 from |compaction_files| and then searches for a
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// b2 in |level_files| for which user_key(u1) = user_key(l2). If it finds such a
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// file b2 (known as a boundary file) it adds it to |compaction_files| and then
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// searches again using this new upper bound.
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">//
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// If there are two blocks, b1=(l1, u1) and b2=(l2, u2) and
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// user_key(u1) = user_key(l2), and if we compact b1 but not b2 then a
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// subsequent get operation will yield an incorrect result because it will
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// return the record from b2 in level i rather than from b1 because it searches
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// level by level for records matching the supplied user key.
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">//
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// parameters:
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">//   in     level_files:      List of files to search for boundary files.
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">//   in/out compaction_files: List of files to extend by adding boundary files.
+</span><span style="color:#998;font-style:italic"></span><span style="color:#998;font-style:italic">// 注意，本函数是用来处理 level1-n 的，所以每个 SSTable 不存在交集
+</span><span style="color:#998;font-style:italic"></span><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">AddBoundaryInputs</span>(<span style="color:#000;font-weight:bold">const</span> InternalKeyComparator<span style="color:#000;font-weight:bold">&amp;</span> icmp,
+                       <span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>vector<span style="color:#000;font-weight:bold">&lt;</span>FileMetaData<span style="color:#000;font-weight:bold">*</span><span style="color:#000;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">&amp;</span> level_files,
+                       std<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>vector<span style="color:#000;font-weight:bold">&lt;</span>FileMetaData<span style="color:#000;font-weight:bold">*</span><span style="color:#000;font-weight:bold">&gt;</span><span style="color:#000;font-weight:bold">*</span> compaction_files) {
+  InternalKey largest_key;
+
+  <span style="color:#998;font-style:italic">// Quick return if compaction_files is empty.
+</span><span style="color:#998;font-style:italic"></span>  <span style="color:#998;font-style:italic">// 尝试找到最大的 key ，其实这里返回 false 当且仅当 compaction_files 为空
+</span><span style="color:#998;font-style:italic"></span>  <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>FindLargestKey(icmp, <span style="color:#000;font-weight:bold">*</span>compaction_files, <span style="color:#000;font-weight:bold">&amp;</span>largest_key)) {
+    <span style="color:#000;font-weight:bold">return</span>;
+  }
+
+  <span style="color:#458;font-weight:bold">bool</span> continue_searching <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">true</span>;
+  <span style="color:#000;font-weight:bold">while</span> (continue_searching) {
+    <span style="color:#998;font-style:italic">// 找到当前的 level_files 中，一个文件中最小的 key 大于 larget_key ，而且其 user_key == largetst_key 的 user_key
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">// 那么说明有重叠，如果不将这部分加入到合并区间内，那么之后这块的数据是过期数据
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">//（具有相同的 user_key ，那么 internal_key 更大的 key 一定是 sequence_number 更小的，所以是国企数据）
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">// 所以我们需要不停地将这部分找到，直到 smallest_boundary_file 为空，说明找不到了，那么就可以停止了
+</span><span style="color:#998;font-style:italic"></span>    FileMetaData<span style="color:#000;font-weight:bold">*</span> smallest_boundary_file <span style="color:#000;font-weight:bold">=</span>
+        FindSmallestBoundaryFile(icmp, level_files, largest_key);
+
+    <span style="color:#998;font-style:italic">// If a boundary file was found advance largest_key, otherwise we&#39;re done.
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">if</span> (smallest_boundary_file <span style="color:#000;font-weight:bold">!</span><span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">NULL</span>) {
+      <span style="color:#998;font-style:italic">// 将这个文件加入 compaction_files
+</span><span style="color:#998;font-style:italic"></span>      compaction_files<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>push_back(smallest_boundary_file);
+      <span style="color:#998;font-style:italic">// 然后这个文件的 largest 必然是新的 compaction_files 中最大的，将其设置为 largetst_key
+</span><span style="color:#998;font-style:italic"></span>      largest_key <span style="color:#000;font-weight:bold">=</span> smallest_boundary_file<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>largest;
+    } <span style="color:#000;font-weight:bold">else</span> {
+      <span style="color:#998;font-style:italic">// 否则没有，那么说明可以停止寻找了
+</span><span style="color:#998;font-style:italic"></span>      continue_searching <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">false</span>;
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="setupotherinputs"><code>SetupOtherInputs</code></h2>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#458;font-weight:bold">void</span> VersionSet<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>SetupOtherInputs(Compaction<span style="color:#000;font-weight:bold">*</span> c) {
+  <span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int</span> level <span style="color:#000;font-weight:bold">=</span> c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>level(); 
+  InternalKey smallest, largest;
+  <span style="color:#998;font-style:italic">//level层边界文件文件查询
+</span><span style="color:#998;font-style:italic"></span>  AddBoundaryInputs(icmp_, current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>files_[level], <span style="color:#000;font-weight:bold">&amp;</span>c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>]);
+  GetRange(c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>], <span style="color:#000;font-weight:bold">&amp;</span>smallest, <span style="color:#000;font-weight:bold">&amp;</span>largest);
+  <span style="color:#998;font-style:italic">//获取level+1层重叠文件
+</span><span style="color:#998;font-style:italic"></span>  current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>GetOverlappingInputs(level <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>, <span style="color:#000;font-weight:bold">&amp;</span>smallest, <span style="color:#000;font-weight:bold">&amp;</span>largest,
+                                 <span style="color:#000;font-weight:bold">&amp;</span>c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>]); 
+
+  <span style="color:#998;font-style:italic">// 获取文件集合边界[all_start, all_limit]
+</span><span style="color:#998;font-style:italic"></span>  InternalKey all_start, all_limit;
+  GetRange2(c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>], c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>], <span style="color:#000;font-weight:bold">&amp;</span>all_start, <span style="color:#000;font-weight:bold">&amp;</span>all_limit);
+
+  <span style="color:#000;font-weight:bold">if</span> (<span style="color:#000;font-weight:bold">!</span>c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>].empty()) {
+    std<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>vector<span style="color:#000;font-weight:bold">&lt;</span>FileMetaData<span style="color:#000;font-weight:bold">*</span><span style="color:#000;font-weight:bold">&gt;</span> expanded0;
+  <span style="color:#998;font-style:italic">//获取level层[all_start, all_limit]的重叠文件，若level为0会挑选出边界文件
+</span><span style="color:#998;font-style:italic"></span>    current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>GetOverlappingInputs(level, <span style="color:#000;font-weight:bold">&amp;</span>all_start, <span style="color:#000;font-weight:bold">&amp;</span>all_limit, <span style="color:#000;font-weight:bold">&amp;</span>expanded0); 
+  <span style="color:#998;font-style:italic">//level非0时挑选边界文件
+</span><span style="color:#998;font-style:italic"></span>    AddBoundaryInputs(icmp_, current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>files_[level], <span style="color:#000;font-weight:bold">&amp;</span>expanded0); 
+
+    <span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int64_t</span> inputs0_size <span style="color:#000;font-weight:bold">=</span> TotalFileSize(c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>]);
+    <span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int64_t</span> inputs1_size <span style="color:#000;font-weight:bold">=</span> TotalFileSize(c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>]);
+    <span style="color:#000;font-weight:bold">const</span> <span style="color:#458;font-weight:bold">int64_t</span> expanded0_size <span style="color:#000;font-weight:bold">=</span> TotalFileSize(expanded0);
+
+  <span style="color:#998;font-style:italic">//文件集合总数小于25
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">if</span> (expanded0.size() <span style="color:#000;font-weight:bold">&gt;</span> c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>].size() <span style="color:#000;font-weight:bold">&amp;</span><span style="color:#000;font-weight:bold">&amp;</span>
+        inputs1_size <span style="color:#000;font-weight:bold">+</span> expanded0_size <span style="color:#000;font-weight:bold">&lt;</span>
+            ExpandedCompactionByteSizeLimit(options_)) {
+      <span style="color:#998;font-style:italic">//获取level的文件边界[new_start, new_limit]
+</span><span style="color:#998;font-style:italic"></span>      InternalKey new_start, new_limit;
+      GetRange(expanded0, <span style="color:#000;font-weight:bold">&amp;</span>new_start, <span style="color:#000;font-weight:bold">&amp;</span>new_limit);
+      std<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>vector<span style="color:#000;font-weight:bold">&lt;</span>FileMetaData<span style="color:#000;font-weight:bold">*</span><span style="color:#000;font-weight:bold">&gt;</span> expanded1;
+      <span style="color:#998;font-style:italic">//获取level+1层[new_start, new_limit]重叠文件
+</span><span style="color:#998;font-style:italic"></span>      current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>GetOverlappingInputs(level <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>, <span style="color:#000;font-weight:bold">&amp;</span>new_start, <span style="color:#000;font-weight:bold">&amp;</span>new_limit,
+                                     <span style="color:#000;font-weight:bold">&amp;</span>expanded1);
+      <span style="color:#998;font-style:italic">//若level+1层文件数不变，更新input0
+</span><span style="color:#998;font-style:italic"></span>      <span style="color:#000;font-weight:bold">if</span> (expanded1.size() <span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">=</span> c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>].size()) {
+        smallest <span style="color:#000;font-weight:bold">=</span> new_start;
+        largest <span style="color:#000;font-weight:bold">=</span> new_limit;
+        c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">=</span> expanded0;
+        c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">=</span> expanded1;
+        GetRange2(c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">0</span>], c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>inputs_[<span style="color:#099">1</span>], <span style="color:#000;font-weight:bold">&amp;</span>all_start, <span style="color:#000;font-weight:bold">&amp;</span>all_limit);
+      }
+    }
+  }
+
+ <span style="color:#998;font-style:italic">//获取level+2层重叠文件
+</span><span style="color:#998;font-style:italic"></span>  <span style="color:#000;font-weight:bold">if</span> (level <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">&lt;</span> config<span style="color:#000;font-weight:bold">:</span><span style="color:#000;font-weight:bold">:</span>kNumLevels) {
+    current_<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>GetOverlappingInputs(level <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">2</span>, <span style="color:#000;font-weight:bold">&amp;</span>all_start, <span style="color:#000;font-weight:bold">&amp;</span>all_limit,
+                                   <span style="color:#000;font-weight:bold">&amp;</span>c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>grandparents_);
+  }
+
+  <span style="color:#998;font-style:italic">//更新合并文件终止点
+</span><span style="color:#998;font-style:italic"></span>  compact_pointer_[level] <span style="color:#000;font-weight:bold">=</span> largest.Encode().ToString();
+  c<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">&gt;</span>edit_.SetCompactPointer(level, largest);
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="compaction-">Compaction 的文件挑选流程</h2>
+<p>Compaction 分为 Auto 和 Manual，即自动和人工</p>
+<p>Auto 选择的压缩文件范围的函数是 <code>PickCompaction</code></p>
+<p>Manual 选择的压缩文件范围的函数是 <code>CompactRange</code></p>
+<p>在 <code>PickCompaction</code> 和 <code>CompactRange</code> 中都调用了 <code>SetupOtherInputs</code></p>
+<p>注意 <code>SetupOtherInputs</code> 的参数是 <code>Compaction* c</code></p>
+<p>因为 Compaction 涉及到第 i 层和第 i+1 层，所以 <code>PickCompaction</code> 和 <code>CompactRange</code> 都预先选择了符合条件的第 i 层的文件，</p>
+<p>这部分用 <code>GetOverlappingInputs</code> 实现的。</p>
+<p>考虑一种情况，假设第 i 层的 SSTable 编号范围是 [0, n-1]</p>
+<p>我们通过 <code>PickCompaction</code> 或 <code>CompactRange</code> 预先选择的第 i 层 SSTable 编号范围是 [l,r] ，其中 r+1&lt;n，</p>
+<p>如果第 r+1 个 SSTable 的最小 InternalKey 大于第 r 个 SSTable 的最大 InternalKey ，而两者的 UserKey 又相同</p>
+<p>则说明 r+1 中最小的 InternalKey 是过期数据，而我们只选择了 [l, r] 去压缩，接下来查询的时候会先到第 i 层，查到了这个 UserKey ，</p>
+<p>但是已经是过期数据了，就会造成错误，所以我们需要将 r+1 也加入，这部分就是 <code>AddBoundaryInputs</code> 实现的了。</p>
+<p>接下来，我们需要到第 i+1 层选择需要 Compaction 的文件，</p>
+<p>选择的方式依然是先 <code>GetOverlappingInputs</code> ，再 <code>AddBoundaryInputs</code> 。</p>
+<p>如此，我们就得到了 <code>input_[0]</code> 即第 i 层的文件，<code>input_[1]</code> 即第 i+1 层的文件。</p>
+<p>但是，LevelDB 比较贪心。如果说 <code>input_[1]</code> 的文件与第 i 层不在 <code>input_[0]</code> 中的文件还有交集，</p>
+<p>那么调用 <code>GetOverlappingInputs</code> 再去查询，产生最新的 <code>new_input_[0]</code> ，</p>
+<p>然后看第 i+1 层与 <code>new_input_[0]</code> 有<strong>交集和边界</strong>的文件集合 <code>new_input_[1]</code></p>
+<p>如果 <code>new_input_[1] == input_[1]</code> ，那么就以 <code>new_input_[1]</code> 和 <code>new_input_[1]</code> 作为最终的 Compaction 文件</p>
+<p>如果<code>new_input_[1] != input_[1] </code> ，此时必然是 <code>input_[1]</code> 为 <code>new_input_[1]</code> 的子集，此时我们就又要去第 i 层来更新 <code>new_input_[0]</code>  了，如此循环往复不是我们所希望的，所以在这种情况下，我们就拿 <code>input_[0]</code> 和 <code>input_[1]</code> 作为最终的 Compaction 文件</p>
+<p>此外，使用 <code>new_input_[0]</code> 和 <code>new_input_[1](new_input_[1] == input_[1])</code> 的另一个条件是，<code>new_input_[0]</code> 加 <code>input_[1]</code> 的文件总大小小于限制（50M，每次文件不大于2M，即最多 25 个文件）</p>
+<p>若 <code>new_input_[0]</code> 的数量大于 <code>input_[0]</code> 的数量，</p>
+
+        </div>
+
+        
+
+
+        
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E6%95%B0%E6%8D%AE%E5%BA%93' target="_blank">数据库</a></li>
+                
+                <li><a href='/tags/LevelDB' target="_blank">LevelDB</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2023 <a href="https://zzzyc.github.io/">solego&#39;s blog By solego</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zzzyc.github.io/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zzzyc.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zzzyc.github.io/post/%E7%BD%AE%E9%A1%B6%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/" title="【置顶】一些想法" target="_blank">【置顶】一些想法</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/LevelDB%E6%96%87%E4%BB%B6%E6%8C%91%E9%80%89%E8%BF%87%E7%A8%8B/" title="【LevelDB】文件挑选过程" target="_blank">【LevelDB】文件挑选过程</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/kuangbin%E4%B8%93%E9%A2%987-%E7%BA%BF%E6%AE%B5%E6%A0%91/" title="Kuangbin专题7 线段树" target="_blank">Kuangbin专题7 线段树</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/cs/%E8%8E%B7%E5%8F%96%E7%9B%AE%E7%9A%84%E4%B8%BB%E6%9C%BA%E5%9C%B0%E5%9D%80%E7%9A%84%E8%BF%87%E7%A8%8B/" title="获取目的主机地址的过程" target="_blank">获取目的主机地址的过程</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E5%AD%90%E9%9B%86%E6%9E%9A%E4%B8%BE/" title="子集枚举" target="_blank">子集枚举</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/SFX-2023%E5%86%B3%E8%B5%9B/" title="SFX 2023决赛" target="_blank">SFX 2023决赛</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/tool/Unix%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Unix常用命令" target="_blank">Unix常用命令</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/%E6%97%A0%E5%90%91%E5%9B%BE%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/" title="无向图的双连通分量" target="_blank">无向图的双连通分量</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/algorithm/20230507_LeetCode-2023Spring/" title="LeetCode 2023 春季杯团队赛" target="_blank">LeetCode 2023 春季杯团队赛</a>
+    </li>
+    
+    <li>
+        <a href="https://zzzyc.github.io/tool/%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8B%8D%E5%99%A8/" title="数据对拍器" target="_blank">数据对拍器</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>categories</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://zzzyc.github.io/categories/CS/">CS (3)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E5%B7%A5%E5%85%B7/">工具 (1)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E6%AF%94%E8%B5%9B/">比赛 (2)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E7%AE%97%E6%B3%95/">算法 (6)</a></li>
+    
+    <li><a href="https://zzzyc.github.io/categories/%E9%97%B2%E8%B0%88/">闲谈 (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>tags</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://zzzyc.github.io/tags/DFS/">DFS</a>
+    
+    <a href="https://zzzyc.github.io/tags/LeetCode/">LeetCode</a>
+    
+    <a href="https://zzzyc.github.io/tags/LevelDB/">LevelDB</a>
+    
+    <a href="https://zzzyc.github.io/tags/UTF-8/">UTF-8</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BA%8C%E5%88%86%E5%9B%BE/">二分图</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/">位运算</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/">字符编码</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%AF%B9%E6%8B%8D/">对拍</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">强连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">拓扑排序</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E5%9B%A2/">最大团</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E7%8B%AC%E7%AB%8B%E9%9B%86/">最大独立集</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%A4%A7%E8%BE%B9%E5%8C%B9%E9%85%8D/">最大边匹配</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E7%82%B9%E8%A6%86%E7%9B%96/">最小点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E5%B0%8F%E9%87%8D%E5%A4%8D%E8%B7%AF%E5%BE%84%E7%82%B9%E8%A6%86%E7%9B%96/">最小重复路径点覆盖</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%9C%80%E8%BF%91/">最近</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">树状数组</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E6%AC%A7%E6%8B%89%E8%B7%AF%E5%BE%84/">欧拉路径</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E7%82%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">点的双连通分量</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+    
+    <a href="https://zzzyc.github.io/tags/%E8%BE%B9%E7%9A%84%E5%8F%8C%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F/">边的双连通分量</a>
+    
+</div>
+    </section>
+
+    
+
+    
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

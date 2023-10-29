@@ -6,10 +6,28 @@
     <description>Recent content on solego&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-hans</language>
-    <lastBuildDate>Tue, 17 Oct 2023 18:31:42 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 29 Oct 2023 23:01:39 +0800</lastBuildDate>
     
 	<atom:link href="https://zzzyc.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【置顶】一些想法</title>
+      <link>https://zzzyc.github.io/post/%E7%BD%AE%E9%A1%B6%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/</link>
+      <pubDate>Sun, 29 Oct 2023 23:01:39 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/post/%E7%BD%AE%E9%A1%B6%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95/</guid>
+      <description>【置顶】一些想法</description>
+    </item>
+    
+    <item>
+      <title>【LevelDB】文件挑选过程</title>
+      <link>https://zzzyc.github.io/cs/LevelDB%E6%96%87%E4%BB%B6%E6%8C%91%E9%80%89%E8%BF%87%E7%A8%8B/</link>
+      <pubDate>Tue, 24 Oct 2023 14:57:05 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/cs/LevelDB%E6%96%87%E4%BB%B6%E6%8C%91%E9%80%89%E8%BF%87%E7%A8%8B/</guid>
+      <description>【LevelDB】文件挑选过程</description>
+    </item>
     
     <item>
       <title>语法长难句</title>
