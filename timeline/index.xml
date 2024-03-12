@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Timelines on solego&#39;s blog</title>
+    <link>https://zzzyc.github.io/timeline/</link>
+    <description>Recent content in Timelines on solego&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-hans</language>
+    <lastBuildDate>Tue, 12 Mar 2024 21:42:05 +0800</lastBuildDate>
+    
+	<atom:link href="https://zzzyc.github.io/timeline/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>时间线_20240312_v1</title>
+      <link>https://zzzyc.github.io/timeline/%E6%97%B6%E9%97%B4%E7%BA%BF_20240312_v1.0/</link>
+      <pubDate>Tue, 12 Mar 2024 21:42:05 +0800</pubDate>
+      
+      <guid>https://zzzyc.github.io/timeline/%E6%97%B6%E9%97%B4%E7%BA%BF_20240312_v1.0/</guid>
+      <description>时间线_20240312_v1</description>
+    </item>
+    
+  </channel>
+</rss>
